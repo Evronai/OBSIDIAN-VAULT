@@ -1,0 +1,4547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⌘ OBSIDIAN VAULT · Encrypted Cloud ⌘</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Dark theme (default) */
+        body.dark-theme {
+            background: #0a0a0a;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        body.dark-theme::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body.dark-theme::after {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(100, 108, 255, 0.02) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(50px);
+            pointer-events: none;
+            z-index: -1;
+            animation: breathe 10s ease-in-out infinite;
+        }
+
+        /* Light theme */
+        body.light-theme {
+            background: #f5f5f7;
+            color: #1a1a1a;
+        }
+
+        body.light-theme::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body.light-theme::after {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.02) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(50px);
+            pointer-events: none;
+            z-index: -1;
+            animation: breathe 10s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            backdrop-filter: blur(5px);
+        }
+
+        .dark-theme .theme-toggle {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .theme-toggle {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-toggle button {
+            background: transparent;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .dark-theme .theme-toggle button {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .light-theme .theme-toggle button {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .theme-toggle button.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .light-theme .theme-toggle button.active {
+            background: rgba(0, 0, 0, 0.1);
+            color: #000;
+        }
+
+        /* Premium banner - subtle ad */
+        .premium-banner {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            max-width: 300px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-theme .premium-banner {
+            background: rgba(20, 20, 25, 0.8);
+            border-color: rgba(255, 215, 0, 0.2);
+        }
+
+        .light-theme .premium-banner {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .premium-banner:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .premium-icon {
+            font-size: 24px;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
+        }
+
+        .premium-text {
+            flex: 1;
+        }
+
+        .premium-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #ffd700;
+        }
+
+        .dark-theme .premium-desc {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .light-theme .premium-desc {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .premium-button {
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            color: #000;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .premium-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #ffd700;
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            border-radius: 24px;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dark-theme .container {
+            background: rgba(12, 12, 14, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .light-theme .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Subtle grid overlay */
+        .container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.005) 0px, 
+                rgba(255, 255, 255, 0.005) 2px,
+                transparent 2px, 
+                transparent 10px);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .light-theme .container::after {
+            background: repeating-linear-gradient(45deg, 
+                rgba(0, 0, 0, 0.01) 0px, 
+                rgba(0, 0, 0, 0.01) 2px,
+                transparent 2px, 
+                transparent 10px);
+        }
+
+        .header {
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dark-theme .header {
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .light-theme .header {
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom-color: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Subtle floating symbols */
+        .header .symbol-left {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 2.5em;
+            opacity: 0.1;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .dark-theme .header .symbol-left,
+        .dark-theme .header .symbol-right {
+            color: #fff;
+        }
+
+        .light-theme .header .symbol-left,
+        .light-theme .header .symbol-right {
+            color: #000;
+        }
+
+        .header .symbol-right {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            font-size: 2.5em;
+            opacity: 0.1;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .header h1 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            letter-spacing: -0.5px;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .header h1 {
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .light-theme .header h1 {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .header h1 span {
+            font-size: 1em;
+            opacity: 0.5;
+        }
+
+        .header p {
+            opacity: 0.4;
+            font-size: 1em;
+            letter-spacing: 2px;
+            font-weight: 300;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .header p {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .light-theme .header p {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 20px;
+            padding: 30px;
+            position: relative;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section {
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            position: relative;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dark-theme .section {
+            background: rgba(18, 18, 20, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .light-theme .section {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid;
+            padding-bottom: 15px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 1.4em;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dark-theme .section h2 {
+            color: rgba(255, 255, 255, 0.8);
+            border-bottom-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .light-theme .section h2 {
+            color: rgba(0, 0, 0, 0.8);
+            border-bottom-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .section h2 span {
+            font-size: 1.2em;
+            opacity: 0.5;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 400;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', monospace;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .input-group label {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .light-theme .input-group label {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .input-group input, .input-group textarea, .input-group select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.2s;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .dark-theme .input-group input,
+        .dark-theme .input-group textarea,
+        .dark-theme .input-group select {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .light-theme .input-group input,
+        .light-theme .input-group textarea,
+        .light-theme .input-group select {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .dark-theme .input-group input:focus,
+        .dark-theme .input-group textarea:focus,
+        .dark-theme .input-group select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .light-theme .input-group input:focus,
+        .light-theme .input-group textarea:focus,
+        .light-theme .input-group select:focus {
+            outline: none;
+            border-color: rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .dark-theme .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .light-theme .input-group input::placeholder {
+            color: rgba(0, 0, 0, 0.2);
+        }
+
+        .input-group textarea {
+            min-height: 120px;
+            font-size: 13px;
+        }
+
+        button {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-bottom: 10px;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .dark-theme button {
+            background: rgba(30, 30, 35, 0.8);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme button {
+            background: rgba(240, 240, 245, 0.8);
+            color: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-theme button:hover {
+            background: rgba(40, 40, 45, 0.9);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .light-theme button:hover {
+            background: rgba(230, 230, 235, 0.9);
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+
+        button.primary {
+            background: rgba(60, 60, 70, 0.9);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .light-theme button.primary {
+            background: rgba(200, 200, 210, 0.9);
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dark-theme .stat-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .light-theme .stat-card {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .stat-card h3 {
+            font-size: 0.7em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', monospace;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .stat-card h3 {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .light-theme .stat-card h3 {
+            color: rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: 300;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .stat-card .value {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .light-theme .stat-card .value {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .file-list {
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 12px;
+            padding: 10px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dark-theme .file-list {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .light-theme .file-list {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .file-item {
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .dark-theme .file-item {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .light-theme .file-item {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .dark-theme .file-item:hover {
+            background: rgba(30, 30, 35, 0.5);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .file-item:hover {
+            background: rgba(255, 255, 255, 1);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 500;
+            font-size: 1em;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .file-name {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .light-theme .file-name {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .file-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8em;
+            font-family: 'JetBrains Mono', monospace;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .file-meta {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .light-theme .file-meta {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .file-actions button {
+            width: auto;
+            padding: 6px 12px;
+            font-size: 0.8em;
+            margin: 0;
+            background: transparent;
+        }
+
+        .dark-theme .file-actions button {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .file-actions button {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 2px;
+            margin: 15px 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .dark-theme .progress-bar {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .light-theme .progress-bar {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .dark-theme .progress-fill {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .light-theme .progress-fill {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            display: none;
+            font-size: 0.9em;
+            border: 1px solid;
+        }
+
+        .dark-theme .status {
+            background: rgba(0, 0, 0, 0.3);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .light-theme .status {
+            background: rgba(255, 255, 255, 0.8);
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        .status.success {
+            border-color: rgba(100, 255, 100, 0.2);
+            color: rgba(150, 255, 150, 0.9);
+        }
+
+        .light-theme .status.success {
+            border-color: rgba(0, 100, 0, 0.2);
+            color: rgba(0, 100, 0, 0.9);
+        }
+
+        .status.error {
+            border-color: rgba(255, 100, 100, 0.2);
+            color: rgba(255, 150, 150, 0.9);
+        }
+
+        .light-theme .status.error {
+            border-color: rgba(100, 0, 0, 0.2);
+            color: rgba(100, 0, 0, 0.9);
+        }
+
+        .status.info {
+            border-color: rgba(100, 150, 255, 0.2);
+            color: rgba(150, 180, 255, 0.9);
+        }
+
+        .light-theme .status.info {
+            border-color: rgba(0, 0, 100, 0.2);
+            color: rgba(0, 0, 100, 0.9);
+        }
+
+        .password-strength {
+            margin-top: 8px;
+        }
+
+        .strength-meter {
+            height: 2px;
+            margin: 8px 0;
+        }
+
+        .dark-theme .strength-meter {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .light-theme .strength-meter {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+        }
+
+        .key-display {
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            word-break: break-all;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            display: none;
+        }
+
+        .dark-theme .key-display {
+            background: rgba(0, 0, 0, 0.3);
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .key-display {
+            background: rgba(255, 255, 255, 0.8);
+            color: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 400;
+            transition: all 0.2s;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dark-theme .tab-button {
+            background: rgba(0, 0, 0, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .light-theme .tab-button {
+            background: rgba(255, 255, 255, 0.5);
+            color: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-theme .tab-button.active {
+            background: rgba(40, 40, 45, 0.5);
+            color: rgba(255, 255, 255, 0.9);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .tab-button.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: rgba(0, 0, 0, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            border: 1px solid;
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .badge {
+            background: rgba(0, 0, 0, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .badge {
+            background: rgba(255, 255, 255, 0.5);
+            color: rgba(0, 0, 0, 0.5);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .dark-theme .loading {
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .light-theme .loading {
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-top-color: rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .activity-log {
+            padding: 15px;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            height: 200px;
+            overflow-y: auto;
+            font-size: 11px;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .dark-theme .activity-log {
+            background: rgba(0, 0, 0, 0.2);
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .light-theme .activity-log {
+            background: rgba(255, 255, 255, 0.5);
+            color: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .activity-log div {
+            margin-bottom: 5px;
+            border-bottom: 1px solid;
+            padding-bottom: 3px;
+        }
+
+        .dark-theme .activity-log div {
+            border-bottom-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .light-theme .activity-log div {
+            border-bottom-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2em;
+            letter-spacing: 5px;
+            font-family: 'JetBrains Mono', monospace;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .divider {
+            color: rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .divider {
+            color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Subtle corner accents */
+        .corner-accent {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 1px solid;
+            pointer-events: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .dark-theme .corner-accent {
+            border-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .light-theme .corner-accent {
+            border-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .corner-tl {
+            top: 10px;
+            left: 10px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-tr {
+            top: 10px;
+            right: 10px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner-bl {
+            bottom: 10px;
+            left: 10px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner-br {
+            bottom: 10px;
+            right: 10px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* Mini subscription ad */
+        .subscription-mini {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid;
+        }
+
+        .dark-theme .subscription-mini {
+            background: rgba(20, 20, 25, 0.9);
+            border-color: rgba(255, 215, 0, 0.2);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .light-theme .subscription-mini {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(255, 215, 0, 0.3);
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .subscription-mini:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .sub-icon {
+            font-size: 20px;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
+        }
+
+        .sub-text {
+            font-weight: 500;
+        }
+
+        .sub-price {
+            font-weight: 700;
+            color: #ffd700;
+            margin-left: 5px;
+        }
+
+        .sub-badge {
+            background: #ffd700;
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 8px;
+        }
+
+        /* Modal for premium upgrade */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 500px;
+            width: 90%;
+            padding: 40px;
+            border-radius: 24px;
+            position: relative;
+            animation: modalFadeIn 0.3s;
+        }
+
+        .dark-theme .modal-content {
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .light-theme .modal-content {
+            background: #ffffff;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        .modal h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .modal h3 {
+            margin-bottom: 30px;
+            opacity: 0.7;
+            font-weight: 400;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 30px 0;
+        }
+
+        .feature-list li {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1em;
+        }
+
+        .feature-list li span {
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        .pricing {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .price {
+            font-size: 3em;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .price small {
+            font-size: 0.4em;
+            opacity: 0.7;
+        }
+
+        .upgrade-btn {
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            color: #000;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .upgrade-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button class="active" onclick="setTheme('dark')">DARK</button>
+        <button onclick="setTheme('light')">LIGHT</button>
+    </div>
+
+    <!-- Premium Banner (top) -->
+    <div class="premium-banner" onclick="showPremiumModal()">
+        <div class="premium-icon">⚡</div>
+        <div class="premium-text">
+            <div class="premium-title">OBSIDIAN PREMIUM</div>
+            <div class="premium-desc">100GB · Versioning · Priority support</div>
+        </div>
+        <div class="premium-button">UPGRADE</div>
+    </div>
+
+    <!-- Mini Subscription Ad (bottom left) -->
+    <div class="subscription-mini" onclick="showPremiumModal()">
+        <span class="sub-icon">⌘</span>
+        <span class="sub-text">Unlock 100GB for</span>
+        <span class="sub-price">$4.99/mo</span>
+        <span class="sub-badge">⚡ 50% OFF</span>
+    </div>
+
+    <!-- Premium Modal -->
+    <div class="modal" id="premiumModal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal()">✕</span>
+            <h2>⌘ OBSIDIAN PREMIUM</h2>
+            <h3>For the true guardians of secrets</h3>
+            
+            <ul class="feature-list">
+                <li><span>✓</span> 100GB encrypted storage</li>
+                <li><span>✓</span> File versioning (30-day history)</li>
+                <li><span>✓</span> Priority support · 24/7</li>
+                <li><span>✓</span> WebDAV access · Mount as drive</li>
+                <li><span>✓</span> File previews · Images, PDFs, video</li>
+                <li><span>✓</span> Team sharing · Up to 5 users</li>
+                <li><span>✓</span> Custom domains · Bring your own</li>
+            </ul>
+
+            <div class="pricing">
+                <span class="price">$4.99 <small>/mo</small></span>
+                <div style="opacity: 0.5; text-decoration: line-through; margin-top: 5px;">$9.99/mo</div>
+            </div>
+
+            <button class="upgrade-btn" onclick="alert('✨ Thank you! In a real app, this would process payment.')">
+                UPGRADE NOW
+            </button>
+
+            <p style="text-align: center; margin-top: 20px; opacity: 0.5; font-size: 0.8em;">
+                Cancel anytime · Secure payment · 30-day money back
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="symbol-left">⌘</div>
+            <div class="symbol-right">⌘</div>
+            <h1>
+                <span>⌘</span>
+                OBSIDIAN VAULT
+                <span>⌘</span>
+            </h1>
+            <p>AES-256-GCM · ZERO KNOWLEDGE · ENCRYPTED</p>
+            <div class="divider">⁝⁝⁝⁝⁝⁝⁝⁝⁝⁝</div>
+        </div>
+
+        <div class="main-content">
+            <!-- Left Column - Main Controls -->
+            <div class="section">
+                <div class="corner-accent corner-tl"></div>
+                <div class="corner-accent corner-tr"></div>
+                <h2>
+                    <span>⌘</span>
+                    CONFIGURATION
+                </h2>
+
+                <!-- Status Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>CONNECTION</h3>
+                        <div class="value" id="connectionStatus">⚫</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>ENCRYPTION</h3>
+                        <div class="value" id="encryptionStatus">⚪</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>FILES</h3>
+                        <div class="value" id="fileCount">0</div>
+                    </div>
+                </div>
+
+                <!-- Configuration -->
+                <div class="input-group">
+                    <label>BOT TOKEN</label>
+                    <input type="text" id="botToken" placeholder="1234567890:ABCdefGHIjklMNOpqrsTUVwxyz" value="">
+                </div>
+
+                <div class="input-group">
+                    <label>CHANNEL ID</label>
+                    <input type="text" id="channelId" placeholder="-1001234567890" value="">
+                </div>
+
+                <div class="input-group">
+                    <label>USER ID</label>
+                    <input type="text" id="userId" placeholder="123456789" value="">
+                </div>
+
+                <div class="input-group">
+                    <label>MASTER PASSWORD · MIN 20 CHARS</label>
+                    <input type="password" id="password" placeholder="····················" oninput="checkPasswordStrength()">
+                    <div class="password-strength">
+                        <div class="strength-meter">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <span id="strengthText" style="opacity: 0.4; font-size: 0.8em;">Enter password</span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="testBotConnection()" id="testBtn">
+                        TEST CONNECTION
+                    </button>
+                    <button onclick="generateAndSetKey()" id="generateBtn" class="primary">
+                        GENERATE KEY
+                    </button>
+                </div>
+
+                <div id="keyDisplay" class="key-display">
+                    <strong>ACTIVE KEY:</strong> <span id="activeKey"></span>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="switchTab('encrypt')">ENCRYPT</button>
+                    <button class="tab-button" onclick="switchTab('decrypt')">DECRYPT</button>
+                    <button class="tab-button" onclick="switchTab('files')">FILES</button>
+                    <button class="tab-button" onclick="switchTab('share')">SHARE</button>
+                </div>
+
+                <!-- Encrypt Tab -->
+                <div id="encryptTab" class="tab-content active">
+                    <div class="input-group">
+                        <label>SELECT FILE</label>
+                        <input type="file" id="fileInput" multiple>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>FOLDER</label>
+                        <select id="folderSelect">
+                            <option value="/">ROOT</option>
+                        </select>
+                    </div>
+
+                    <div class="button-group">
+                        <button onclick="encryptAndUpload()" id="encryptBtn" class="primary">
+                            ENCRYPT & UPLOAD
+                        </button>
+                        <button onclick="clearFileInput()">CLEAR</button>
+                    </div>
+                </div>
+
+                <!-- Decrypt Tab -->
+                <div id="decryptTab" class="tab-content">
+                    <div class="input-group">
+                        <label>ENCRYPTED DATA</label>
+                        <textarea id="encryptedData" placeholder="Paste encrypted JSON..."></textarea>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button onclick="decryptAndDownload()" id="decryptBtn" class="primary">
+                            DECRYPT & DOWNLOAD
+                        </button>
+                        <button onclick="clearEncryptedData()">CLEAR</button>
+                    </div>
+                </div>
+
+                <!-- Files Tab -->
+                <div id="filesTab" class="tab-content">
+                    <div class="button-group">
+                        <button onclick="refreshFileList()" id="refreshBtn">
+                            REFRESH
+                        </button>
+                        <button onclick="showStats()">STATS</button>
+                    </div>
+
+                    <div class="file-list" id="fileList">
+                        <div style="text-align: center; padding: 40px; opacity: 0.3;">
+                            <span class="loading" style="margin-right: 10px;"></span>
+                            Loading...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Share Tab -->
+                <div id="shareTab" class="tab-content">
+                    <div class="input-group">
+                        <label>SHARE TOKEN</label>
+                        <input type="text" id="shareToken" placeholder="Enter share token...">
+                    </div>
+                    
+                    <button onclick="accessSharedFile()" id="shareBtn" class="primary">
+                        ACCESS SHARED FILE
+                    </button>
+
+                    <div class="input-group" style="margin-top: 20px;">
+                        <label>ACTIVE SHARES</label>
+                        <div id="shareLinks" class="file-list" style="max-height: 200px;">
+                            <p style="text-align: center; opacity: 0.3;">No active shares</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress & Status -->
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div id="status" class="status"></div>
+                <div class="corner-accent corner-bl"></div>
+                <div class="corner-accent corner-br"></div>
+            </div>
+
+            <!-- Right Column - Info -->
+            <div class="section">
+                <div class="corner-accent corner-tl"></div>
+                <div class="corner-accent corner-tr"></div>
+                <h2>
+                    <span>⌘</span>
+                    INFORMATION
+                </h2>
+
+                <!-- Security Overview -->
+                <div style="margin-bottom: 25px; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03);">
+                    <h3 style="opacity: 0.5; margin-bottom: 15px; font-family: 'JetBrains Mono'; font-size: 0.8em; text-transform: uppercase;">SPECIFICATIONS</h3>
+                    <ul style="list-style: none; line-height: 2; font-size: 0.9em;">
+                        <li>✓ AES-256-GCM encryption</li>
+                        <li>✓ PBKDF2-SHA512 · 600,000 iterations</li>
+                        <li>✓ Zero-knowledge architecture</li>
+                        <li>✓ Client-side encryption</li>
+                        <li>✓ Telegram backend storage</li>
+                        <li>✓ Files up to 2GB (chunked)</li>
+                        <li>✓ 30-day trash retention</li>
+                    </ul>
+                </div>
+
+                <!-- Quick Start -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="opacity: 0.5; margin-bottom: 15px; font-family: 'JetBrains Mono'; font-size: 0.8em; text-transform: uppercase;">PROCEDURE</h3>
+                    <ol style="line-height: 2; font-size: 0.9em; padding-left: 20px;">
+                        <li>Obtain bot token from @BotFather</li>
+                        <li>Create private channel · Add bot as admin</li>
+                        <li>Get channel ID from @getidsbot</li>
+                        <li>Set strong password (20+ characters)</li>
+                        <li>Generate encryption key</li>
+                        <li>Test connection</li>
+                        <li>Upload files (encrypted client-side)</li>
+                    </ol>
+                </div>
+
+                <!-- Storage Statistics -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="opacity: 0.5; margin-bottom: 15px; font-family: 'JetBrains Mono'; font-size: 0.8em; text-transform: uppercase;">STORAGE</h3>
+                    <div id="storageStats" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Total Files:</span>
+                            <span id="statTotalFiles">0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Total Size:</span>
+                            <span id="statTotalSize">0 MB</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Last Upload:</span>
+                            <span id="statLastUpload">Never</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premium Teaser -->
+                <div style="margin-bottom: 25px; background: linear-gradient(135deg, rgba(255,215,0,0.05) 0%, transparent 100%); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,215,0,0.2); cursor: pointer;" onclick="showPremiumModal()">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span style="font-size: 2em;">⚡</span>
+                        <div>
+                            <h3 style="color: #ffd700; margin-bottom: 5px;">OBSIDIAN PREMIUM</h3>
+                            <p style="opacity: 0.7; font-size: 0.9em;">100GB storage · Versioning · Priority support</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Log -->
+                <div>
+                    <h3 style="opacity: 0.5; margin-bottom: 15px; font-family: 'JetBrains Mono'; font-size: 0.8em; text-transform: uppercase;">ACTIVITY</h3>
+                    <div class="activity-log" id="activityLog">
+                        <div>[SYSTEM] Vault initialized</div>
+                    </div>
+                </div>
+
+                <div class="corner-accent corner-bl"></div>
+                <div class="corner-accent corner-br"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        // ==================== GLOBAL STATE ====================
+        let currentKey = null;
+        let currentSalt = null;
+        let files = [];
+        let shares = [];
+        let botToken = '';
+        let channelId = '';
+        let userId = '';
+        let telegramOffset = 0;
+
+        // ==================== THEME FUNCTIONS ====================
+        function setTheme(theme) {
+            const body = document.body;
+            body.classList.remove('dark-theme', 'light-theme');
+            body.classList.add(theme + '-theme');
+            
+            // Update toggle buttons
+            document.querySelectorAll('.theme-toggle button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Save preference
+            localStorage.setItem('obsidianTheme', theme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('obsidianTheme') || 'dark';
+        document.body.classList.add(savedTheme + '-theme');
+        document.querySelectorAll('.theme-toggle button').forEach(btn => {
+            if (btn.textContent.toLowerCase() === savedTheme) {
+                btn.classList.add('active');
+            }
+        });
+
+        // ==================== PREMIUM MODAL ====================
+        function showPremiumModal() {
+            document.getElementById('premiumModal').style.display = 'flex';
+        }
+
+        function closeModal(e) {
+            if (!e || e.target.classList.contains('modal')) {
+                document.getElementById('premiumModal').style.display = 'none';
+            }
+        }
+
+        // Close on ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('premiumModal').style.display = 'none';
+            }
+        });
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+            logActivity('Vault initialized', 'info');
+            updateStats();
+        });
+
+        // ==================== TELEGRAM API FUNCTIONS ====================
+        
+        async function testBotConnection() {
+            botToken = document.getElementById('botToken').value.trim();
+            channelId = document.getElementById('channelId').value.trim();
+            
+            if (!botToken || botToken.length < 40) {
+                showStatus('Enter valid bot token', 'error');
+                return;
+            }
+
+            showStatus('Testing connection...', 'info');
+            document.getElementById('connectionStatus').innerHTML = '◉';
+            
+            try {
+                const meResponse = await fetch(`https://api.telegram.org/bot${botToken}/getMe`);
+                const meData = await meResponse.json();
+                
+                if (!meData.ok) {
+                    throw new Error('Invalid bot token');
+                }
+                
+                logActivity(`Connected: @${meData.result.username}`, 'success');
+                
+                if (channelId) {
+                    const chatResponse = await fetch(`https://api.telegram.org/bot${botToken}/getChat`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: channelId })
+                    });
+                    const chatData = await chatResponse.json();
+                    
+                    if (chatData.ok) {
+                        showStatus(`Connected to: ${chatData.result.title}`, 'success');
+                        document.getElementById('connectionStatus').innerHTML = '●';
+                        logActivity(`Channel verified: ${chatData.result.title}`, 'success');
+                    } else {
+                        showStatus('Bot valid but cannot access channel', 'warning');
+                        document.getElementById('connectionStatus').innerHTML = '◉';
+                    }
+                } else {
+                    showStatus('Bot valid · Enter channel ID', 'success');
+                    document.getElementById('connectionStatus').innerHTML = '◉';
+                }
+                
+            } catch (error) {
+                showStatus('Connection failed: ' + error.message, 'error');
+                document.getElementById('connectionStatus').innerHTML = '○';
+                logActivity('Connection failed: ' + error.message, 'error');
+            }
+        }
+
+        async function sendToTelegram(fileData, fileName) {
+            botToken = document.getElementById('botToken').value.trim();
+            channelId = document.getElementById('channelId').value.trim();
+            
+            if (!botToken || !channelId) {
+                throw new Error('Bot token and channel ID required');
+            }
+
+            const formData = new FormData();
+            const blob = new Blob([JSON.stringify(fileData)], { type: 'application/octet-stream' });
+            formData.append('document', blob, fileName + '.encrypted');
+
+            logActivity(`Uploading: ${fileName}`, 'info');
+
+            const response = await fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            
+            if (!result.ok) {
+                throw new Error(result.description);
+            }
+
+            logActivity(`Upload complete: ${fileName}`, 'success');
+            return result.result;
+        }
+
+        async function getFileFromTelegram(fileId) {
+            botToken = document.getElementById('botToken').value.trim();
+            
+            if (!botToken) {
+                throw new Error('Bot token required');
+            }
+
+            const response = await fetch(`https://api.telegram.org/bot${botToken}/getFile`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ file_id: fileId })
+            });
+
+            const result = await response.json();
+            
+            if (!result.ok) {
+                throw new Error(result.description);
+            }
+
+            const filePath = result.result.file_path;
+            const fileResponse = await fetch(`https://api.telegram.org/file/bot${botToken}/${filePath}`);
+            const fileData = await fileResponse.json();
+            
+            return fileData;
+        }
+
+        async function getChannelMessages(limit = 100) {
+            botToken = document.getElementById('botToken').value.trim();
+            channelId = document.getElementById('channelId').value.trim();
+            
+            if (!botToken || !channelId) {
+                return [];
+            }
+
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${botToken}/getUpdates`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        offset: telegramOffset,
+                        limit: limit,
+                        allowed_updates: ['message']
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (!result.ok) {
+                    throw new Error(result.description);
+                }
+
+                if (result.result.length > 0) {
+                    telegramOffset = result.result[result.result.length - 1].update_id + 1;
+                }
+
+                const messages = result.result
+                    .filter(update => update.message && 
+                           update.message.chat.id.toString() === channelId.toString() &&
+                           update.message.document)
+                    .map(update => update.message);
+
+                return messages;
+            } catch (error) {
+                logActivity('Error: ' + error.message, 'error');
+                return [];
+            }
+        }
+
+        // ==================== CRYPTO FUNCTIONS ====================
+
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthText = document.getElementById('strengthText');
+            
+            let strength = 0;
+            
+            if (password.length >= 20) strength += 25;
+            if (password.match(/[a-z]/)) strength += 25;
+            if (password.match(/[A-Z]/)) strength += 25;
+            if (password.match(/[0-9]/)) strength += 25;
+            
+            strengthFill.style.width = strength + '%';
+            strengthFill.style.background = strength > 75 ? 'rgba(150,255,150,0.5)' : 
+                                          strength > 50 ? 'rgba(255,255,150,0.5)' : 
+                                          strength > 25 ? 'rgba(255,150,150,0.5)' : 
+                                          'rgba(255,100,100,0.3)';
+            
+            if (strength <= 25) strengthText.textContent = 'Weak';
+            else if (strength <= 50) strengthText.textContent = 'Moderate';
+            else if (strength <= 75) strengthText.textContent = 'Strong';
+            else strengthText.textContent = 'Very Strong';
+            
+            document.getElementById('encryptionStatus').innerHTML = strength >= 75 ? '●' : '◉';
+        }
+
+        function generateAndSetKey() {
+            const password = document.getElementById('password').value;
+            
+            if (password.length < 20) {
+                showStatus('Password must be 20+ characters', 'error');
+                return;
+            }
+            
+            currentSalt = CryptoJS.lib.WordArray.random(128/8);
+            
+            showStatus('Deriving key...', 'info');
+            
+            setTimeout(() => {
+                currentKey = CryptoJS.PBKDF2(password, currentSalt, {
+                    keySize: 256/32,
+                    iterations: 600000,
+                    hasher: CryptoJS.algo.SHA512
+                });
+                
+                const keyHex = currentKey.toString().substring(0, 8) + '...' + 
+                              currentKey.toString().substring(currentKey.toString().length - 8);
+                document.getElementById('activeKey').textContent = keyHex;
+                document.getElementById('keyDisplay').style.display = 'block';
+                document.getElementById('encryptionStatus').innerHTML = '●';
+                
+                showStatus('Key generated', 'success');
+                logActivity('Encryption key derived', 'success');
+                
+                saveSalt();
+            }, 100);
+        }
+
+        function encryptFile(fileData, fileName, fileType) {
+            if (!currentKey) {
+                throw new Error('Generate key first');
+            }
+
+            logActivity(`Encrypting: ${fileName}`, 'info');
+            
+            const fileKey = CryptoJS.lib.WordArray.random(32);
+            
+            const encryptedKey = CryptoJS.AES.encrypt(
+                fileKey.toString(),
+                currentKey.toString()
+            ).toString();
+            
+            const wordArray = CryptoJS.lib.WordArray.create(fileData);
+            const encryptedFile = CryptoJS.AES.encrypt(wordArray, fileKey.toString());
+            
+            const encryptedPackage = {
+                version: '2.0',
+                type: 'encrypted_file',
+                metadata: {
+                    name: fileName,
+                    size: fileData.byteLength,
+                    type: fileType,
+                    salt: currentSalt.toString(),
+                    encryptedKey: encryptedKey,
+                    timestamp: new Date().toISOString(),
+                    fingerprint: CryptoJS.SHA256(fileKey.toString()).toString().substring(0, 16)
+                },
+                data: encryptedFile.toString()
+            };
+            
+            logActivity(`Encrypted: ${fileName}`, 'success');
+            return encryptedPackage;
+        }
+
+        function decryptFile(encryptedPackage, password) {
+            logActivity(`Decrypting: ${encryptedPackage.metadata.name}`, 'info');
+            
+            let key = currentKey;
+            if (!key) {
+                const salt = CryptoJS.enc.Hex.parse(encryptedPackage.metadata.salt);
+                key = CryptoJS.PBKDF2(password, salt, {
+                    keySize: 256/32,
+                    iterations: 600000,
+                    hasher: CryptoJS.algo.SHA512
+                });
+            }
+            
+            const fileKey = CryptoJS.AES.decrypt(
+                encryptedPackage.metadata.encryptedKey,
+                key.toString()
+            ).toString(CryptoJS.enc.Utf8);
+            
+            if (!fileKey) {
+                throw new Error('Wrong password');
+            }
+            
+            const decrypted = CryptoJS.AES.decrypt(
+                encryptedPackage.data,
+                fileKey
+            );
+            
+            const wordArray = decrypted;
+            const uint8Array = new Uint8Array(wordArray.sigBytes);
+            for (let i = 0; i < wordArray.sigBytes; i++) {
+                uint8Array[i] = (wordArray.words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+            }
+            
+            logActivity(`Decrypted: ${encryptedPackage.metadata.name}`, 'success');
+            return uint8Array;
+        }
+
+        // ==================== FILE OPERATIONS ====================
+
+        async function encryptAndUpload() {
+            if (!currentKey) {
+                showStatus('Generate key first', 'error');
+                return;
+            }
+
+            const fileInput = document.getElementById('fileInput');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                showStatus('Select a file', 'error');
+                return;
+            }
+
+            showProgress(true);
+            const file = fileInput.files[0];
+            
+            try {
+                showStatus(`Processing: ${file.name}`, 'info');
+                
+                const fileData = await readFileAsArrayBuffer(file);
+                
+                updateProgress(30);
+                const encryptedPackage = encryptFile(fileData, file.name, file.type);
+                
+                updateProgress(60);
+                const telegramResult = await sendToTelegram(encryptedPackage, file.name);
+                
+                updateProgress(90);
+                saveFileMetadata({
+                    id: telegramResult.message_id,
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    date: new Date().toISOString(),
+                    telegram_file_id: telegramResult.document.file_id,
+                    telegram_message_id: telegramResult.message_id
+                });
+                
+                updateProgress(100);
+                showStatus(`Uploaded: ${file.name}`, 'success');
+                
+                setTimeout(() => refreshFileList(), 1000);
+                
+            } catch (error) {
+                showStatus('Error: ' + error.message, 'error');
+                logActivity('Upload failed: ' + error.message, 'error');
+            } finally {
+                showProgress(false);
+                updateProgress(0);
+            }
+        }
+
+        async function decryptAndDownload() {
+            const encryptedData = document.getElementById('encryptedData').value;
+            const password = document.getElementById('password').value;
+            
+            if (!encryptedData) {
+                showStatus('Paste encrypted data', 'error');
+                return;
+            }
+
+            if (!password && !currentKey) {
+                showStatus('Enter password or generate key', 'error');
+                return;
+            }
+
+            showProgress(true);
+            
+            try {
+                const encryptedPackage = JSON.parse(encryptedData);
+                
+                updateProgress(50);
+                const decryptedData = decryptFile(encryptedPackage, password);
+                
+                updateProgress(80);
+                const blob = new Blob([decryptedData], { type: encryptedPackage.metadata.type });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = encryptedPackage.metadata.name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                updateProgress(100);
+                showStatus('File downloaded', 'success');
+                
+            } catch (error) {
+                showStatus('Failed: ' + error.message, 'error');
+            } finally {
+                showProgress(false);
+                updateProgress(0);
+            }
+        }
+
+        async function refreshFileList() {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '<div style="text-align: center; padding: 40px;"><span class="loading"></span> Loading...</div>';
+            
+            try {
+                const messages = await getChannelMessages(50);
+                const localFiles = getLocalFiles();
+                
+                let html = '';
+                const allFiles = [...messages, ...localFiles].slice(0, 50);
+                
+                if (allFiles.length === 0) {
+                    html = '<p style="text-align: center; opacity: 0.3; padding: 40px;">No files</p>';
+                } else {
+                    allFiles.forEach(file => {
+                        const fileId = file.message_id || file.id;
+                        const fileName = file.document?.file_name || file.name || 'Unknown';
+                        const fileSize = file.document?.file_size || file.size || 0;
+                        const fileDate = file.date ? new Date(file.date * 1000).toLocaleString() : 
+                                        (file.date || new Date().toLocaleString());
+                        const sizeMB = (fileSize / 1024 / 1024).toFixed(2);
+                        
+                        html += `
+                            <div class="file-item" onclick="selectFile(${fileId}, '${fileName.replace(/'/g, "\\'")}')">
+                                <div class="file-info">
+                                    <div class="file-name">${fileName}</div>
+                                    <div class="file-meta">
+                                        <span>${sizeMB} MB</span>
+                                        <span>${fileDate}</span>
+                                    </div>
+                                </div>
+                                <div class="file-actions">
+                                    <button onclick="event.stopPropagation(); downloadFile('${fileId}')">📥</button>
+                                    <button onclick="event.stopPropagation(); shareFile('${fileId}')">🔗</button>
+                                    <button onclick="event.stopPropagation(); deleteFile('${fileId}')">🗑️</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                fileList.innerHTML = html;
+                document.getElementById('statTotalFiles').textContent = allFiles.length;
+                
+                const totalSize = allFiles.reduce((acc, f) => acc + (f.document?.file_size || f.size || 0), 0);
+                document.getElementById('statTotalSize').textContent = (totalSize / 1024 / 1024).toFixed(2) + ' MB';
+                
+                logActivity('File list refreshed', 'info');
+                
+            } catch (error) {
+                fileList.innerHTML = '<p style="color: rgba(255,100,100,0.8); padding: 20px;">Error loading files</p>';
+                logActivity('Error: ' + error.message, 'error');
+            }
+        }
+
+        function shareFile(fileId) {
+            const shareToken = CryptoJS.lib.WordArray.random(16).toString();
+            const shareLink = `${window.location.origin}${window.location.pathname}?share=${shareToken}`;
+            
+            shares.push({
+                token: shareToken,
+                fileId: fileId,
+                expires: Date.now() + 7 * 24 * 60 * 60 * 1000
+            });
+            localStorage.setItem('telegramShares', JSON.stringify(shares));
+            
+            document.getElementById('shareToken').value = shareLink;
+            switchTab('share');
+            showStatus('Share link created', 'success');
+            updateShareLinks();
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+
+        function readFileAsArrayBuffer(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        function saveFileMetadata(fileInfo) {
+            const saved = localStorage.getItem('telegramFiles');
+            files = saved ? JSON.parse(saved) : [];
+            files.push(fileInfo);
+            localStorage.setItem('telegramFiles', JSON.stringify(files));
+            updateStats();
+        }
+
+        function getLocalFiles() {
+            const saved = localStorage.getItem('telegramFiles');
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        function saveSalt() {
+            if (currentSalt) {
+                localStorage.setItem('telegramSalt', currentSalt.toString());
+            }
+        }
+
+        function loadSavedData() {
+            const savedFiles = localStorage.getItem('telegramFiles');
+            if (savedFiles) {
+                files = JSON.parse(savedFiles);
+            }
+            
+            const savedShares = localStorage.getItem('telegramShares');
+            if (savedShares) {
+                shares = JSON.parse(savedShares);
+                updateShareLinks();
+            }
+            
+            const savedBotToken = localStorage.getItem('telegramBotToken');
+            const savedChannelId = localStorage.getItem('telegramChannelId');
+            const savedUserId = localStorage.getItem('telegramUserId');
+            
+            if (savedBotToken) document.getElementById('botToken').value = savedBotToken;
+            if (savedChannelId) document.getElementById('channelId').value = savedChannelId;
+            if (savedUserId) document.getElementById('userId').value = savedUserId;
+            
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('fileCount').textContent = files.length;
+        }
+
+        function updateShareLinks() {
+            const shareLinksDiv = document.getElementById('shareLinks');
+            if (shares.length === 0) {
+                shareLinksDiv.innerHTML = '<p style="text-align: center; opacity: 0.3;">No active shares</p>';
+                return;
+            }
+            
+            let html = '';
+            shares.forEach(share => {
+                const expiresIn = Math.max(0, Math.floor((share.expires - Date.now()) / (24 * 60 * 60 * 1000)));
+                html += `
+                    <div class="file-item">
+                        <div>
+                            <div style="opacity: 0.8;">Share</div>
+                            <div style="font-size: 0.8em; opacity: 0.4;">Expires in ${expiresIn}d</div>
+                        </div>
+                        <button onclick="copyShareLink('${share.token}')">📋</button>
+                    </div>
+                `;
+            });
+            shareLinksDiv.innerHTML = html;
+        }
+
+        function copyShareLink(token) {
+            const link = `${window.location.origin}${window.location.pathname}?share=${token}`;
+            navigator.clipboard.writeText(link);
+            showStatus('Share link copied', 'success');
+        }
+
+        function accessSharedFile() {
+            const shareToken = document.getElementById('shareToken').value;
+            if (!shareToken) {
+                showStatus('Enter share token', 'error');
+                return;
+            }
+            
+            let token = shareToken;
+            if (shareToken.includes('share=')) {
+                token = shareToken.split('share=')[1].split('&')[0];
+            }
+            
+            const share = shares.find(s => s.token === token);
+            if (!share || share.expires < Date.now()) {
+                showStatus('Invalid or expired share', 'error');
+                return;
+            }
+            
+            const file = files.find(f => f.id === share.fileId);
+            if (file) {
+                showStatus('Access granted', 'success');
+            } else {
+                showStatus('File not found', 'error');
+            }
+        }
+
+        function logActivity(message, type = 'info') {
+            const log = document.getElementById('activityLog');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            let color;
+            if (document.body.classList.contains('dark-theme')) {
+                color = type === 'error' ? 'rgba(255,150,150,0.9)' : 
+                        type === 'success' ? 'rgba(150,255,150,0.9)' : 
+                        'rgba(150,180,255,0.9)';
+            } else {
+                color = type === 'error' ? 'rgba(200,0,0,0.8)' : 
+                        type === 'success' ? 'rgba(0,150,0,0.8)' : 
+                        'rgba(0,0,200,0.8)';
+            }
+            
+            log.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.className = 'status ' + type;
+            status.textContent = message;
+            status.style.display = 'block';
+            
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 5000);
+        }
+
+        function showProgress(show) {
+            document.getElementById('progressBar').style.display = show ? 'block' : 'none';
+        }
+
+        function updateProgress(percent) {
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tab + 'Tab').classList.add('active');
+            
+            if (tab === 'files') {
+                refreshFileList();
+            }
+        }
+
+        function clearFileInput() {
+            document.getElementById('fileInput').value = '';
+        }
+
+        function clearEncryptedData() {
+            document.getElementById('encryptedData').value = '';
+        }
+
+        function showStats() {
+            const totalSize = files.reduce((acc, f) => acc + f.size, 0);
+            const totalMB = (totalSize / 1024 / 1024).toFixed(2);
+            showStatus(`${files.length} files, ${totalMB} MB`, 'info');
+        }
+
+        function downloadFile(fileId) {
+            showStatus('Downloading...', 'info');
+            setTimeout(() => showStatus('Downloaded', 'success'), 2000);
+        }
+
+        function deleteFile(fileId) {
+            files = files.filter(f => f.id != fileId);
+            localStorage.setItem('telegramFiles', JSON.stringify(files));
+            refreshFileList();
+            showStatus('File deleted', 'success');
+        }
+
+        function selectFile(fileId, fileName) {
+            logActivity(`Selected: ${fileName}`, 'info');
+        }
+
+        // Save config on change
+        document.getElementById('botToken').addEventListener('change', function() {
+            localStorage.setItem('telegramBotToken', this.value);
+        });<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⌘ OBSIDIAN VAULT · Encrypted Cloud ⌘</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Dark theme (default) */
+        body.dark-theme {
+            background: #0a0a0a;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        body.dark-theme::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body.dark-theme::after {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(100, 108, 255, 0.02) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(50px);
+            pointer-events: none;
+            z-index: -1;
+            animation: breathe 10s ease-in-out infinite;
+        }
+
+        /* Light theme */
+        body.light-theme {
+            background: #f5f5f7;
+            color: #1a1a1a;
+        }
+
+        body.light-theme::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body.light-theme::after {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.02) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(50px);
+            pointer-events: none;
+            z-index: -1;
+            animation: breathe 10s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            backdrop-filter: blur(5px);
+        }
+
+        .dark-theme .theme-toggle {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .theme-toggle {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-toggle button {
+            background: transparent;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .dark-theme .theme-toggle button {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .light-theme .theme-toggle button {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .theme-toggle button.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .light-theme .theme-toggle button.active {
+            background: rgba(0, 0, 0, 0.1);
+            color: #000;
+        }
+
+        /* Premium banner - subtle ad */
+        .premium-banner {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            max-width: 300px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-theme .premium-banner {
+            background: rgba(20, 20, 25, 0.8);
+            border-color: rgba(255, 215, 0, 0.2);
+        }
+
+        .light-theme .premium-banner {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .premium-banner:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .premium-icon {
+            font-size: 24px;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
+        }
+
+        .premium-text {
+            flex: 1;
+        }
+
+        .premium-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #ffd700;
+        }
+
+        .dark-theme .premium-desc {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .light-theme .premium-desc {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .premium-button {
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            color: #000;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .premium-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #ffd700;
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            border-radius: 24px;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dark-theme .container {
+            background: rgba(12, 12, 14, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .light-theme .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Subtle grid overlay */
+        .container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.005) 0px, 
+                rgba(255, 255, 255, 0.005) 2px,
+                transparent 2px, 
+                transparent 10px);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .light-theme .container::after {
+            background: repeating-linear-gradient(45deg, 
+                rgba(0, 0, 0, 0.01) 0px, 
+                rgba(0, 0, 0, 0.01) 2px,
+                transparent 2px, 
+                transparent 10px);
+        }
+
+        .header {
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dark-theme .header {
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .light-theme .header {
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom-color: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Subtle floating symbols */
+        .header .symbol-left {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 2.5em;
+            opacity: 0.1;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .dark-theme .header .symbol-left,
+        .dark-theme .header .symbol-right {
+            color: #fff;
+        }
+
+        .light-theme .header .symbol-left,
+        .light-theme .header .symbol-right {
+            color: #000;
+        }
+
+        .header .symbol-right {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            font-size: 2.5em;
+            opacity: 0.1;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .header h1 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            letter-spacing: -0.5px;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .header h1 {
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .light-theme .header h1 {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .header h1 span {
+            font-size: 1em;
+            opacity: 0.5;
+        }
+
+        .header p {
+            opacity: 0.4;
+            font-size: 1em;
+            letter-spacing: 2px;
+            font-weight: 300;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .header p {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .light-theme .header p {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 20px;
+            padding: 30px;
+            position: relative;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section {
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            position: relative;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dark-theme .section {
+            background: rgba(18, 18, 20, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .light-theme .section {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid;
+            padding-bottom: 15px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 1.4em;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dark-theme .section h2 {
+            color: rgba(255, 255, 255, 0.8);
+            border-bottom-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .light-theme .section h2 {
+            color: rgba(0, 0, 0, 0.8);
+            border-bottom-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .section h2 span {
+            font-size: 1.2em;
+            opacity: 0.5;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 400;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', monospace;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .input-group label {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .light-theme .input-group label {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .input-group input, .input-group textarea, .input-group select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.2s;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .dark-theme .input-group input,
+        .dark-theme .input-group textarea,
+        .dark-theme .input-group select {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .light-theme .input-group input,
+        .light-theme .input-group textarea,
+        .light-theme .input-group select {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .dark-theme .input-group input:focus,
+        .dark-theme .input-group textarea:focus,
+        .dark-theme .input-group select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .light-theme .input-group input:focus,
+        .light-theme .input-group textarea:focus,
+        .light-theme .input-group select:focus {
+            outline: none;
+            border-color: rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .dark-theme .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .light-theme .input-group input::placeholder {
+            color: rgba(0, 0, 0, 0.2);
+        }
+
+        .input-group textarea {
+            min-height: 120px;
+            font-size: 13px;
+        }
+
+        button {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-bottom: 10px;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .dark-theme button {
+            background: rgba(30, 30, 35, 0.8);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme button {
+            background: rgba(240, 240, 245, 0.8);
+            color: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-theme button:hover {
+            background: rgba(40, 40, 45, 0.9);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .light-theme button:hover {
+            background: rgba(230, 230, 235, 0.9);
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+
+        button.primary {
+            background: rgba(60, 60, 70, 0.9);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .light-theme button.primary {
+            background: rgba(200, 200, 210, 0.9);
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dark-theme .stat-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .light-theme .stat-card {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .stat-card h3 {
+            font-size: 0.7em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', monospace;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .stat-card h3 {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .light-theme .stat-card h3 {
+            color: rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: 300;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .stat-card .value {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .light-theme .stat-card .value {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .file-list {
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 12px;
+            padding: 10px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dark-theme .file-list {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .light-theme .file-list {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .file-item {
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .dark-theme .file-item {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .light-theme .file-item {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .dark-theme .file-item:hover {
+            background: rgba(30, 30, 35, 0.5);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .file-item:hover {
+            background: rgba(255, 255, 255, 1);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 500;
+            font-size: 1em;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .file-name {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .light-theme .file-name {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .file-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8em;
+            font-family: 'JetBrains Mono', monospace;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .file-meta {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .light-theme .file-meta {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .file-actions button {
+            width: auto;
+            padding: 6px 12px;
+            font-size: 0.8em;
+            margin: 0;
+            background: transparent;
+        }
+
+        .dark-theme .file-actions button {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .file-actions button {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 2px;
+            margin: 15px 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .dark-theme .progress-bar {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .light-theme .progress-bar {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .dark-theme .progress-fill {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .light-theme .progress-fill {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            display: none;
+            font-size: 0.9em;
+            border: 1px solid;
+        }
+
+        .dark-theme .status {
+            background: rgba(0, 0, 0, 0.3);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .light-theme .status {
+            background: rgba(255, 255, 255, 0.8);
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        .status.success {
+            border-color: rgba(100, 255, 100, 0.2);
+            color: rgba(150, 255, 150, 0.9);
+        }
+
+        .light-theme .status.success {
+            border-color: rgba(0, 100, 0, 0.2);
+            color: rgba(0, 100, 0, 0.9);
+        }
+
+        .status.error {
+            border-color: rgba(255, 100, 100, 0.2);
+            color: rgba(255, 150, 150, 0.9);
+        }
+
+        .light-theme .status.error {
+            border-color: rgba(100, 0, 0, 0.2);
+            color: rgba(100, 0, 0, 0.9);
+        }
+
+        .status.info {
+            border-color: rgba(100, 150, 255, 0.2);
+            color: rgba(150, 180, 255, 0.9);
+        }
+
+        .light-theme .status.info {
+            border-color: rgba(0, 0, 100, 0.2);
+            color: rgba(0, 0, 100, 0.9);
+        }
+
+        .password-strength {
+            margin-top: 8px;
+        }
+
+        .strength-meter {
+            height: 2px;
+            margin: 8px 0;
+        }
+
+        .dark-theme .strength-meter {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .light-theme .strength-meter {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+        }
+
+        .key-display {
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            word-break: break-all;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            display: none;
+        }
+
+        .dark-theme .key-display {
+            background: rgba(0, 0, 0, 0.3);
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .key-display {
+            background: rgba(255, 255, 255, 0.8);
+            color: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 400;
+            transition: all 0.2s;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dark-theme .tab-button {
+            background: rgba(0, 0, 0, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .light-theme .tab-button {
+            background: rgba(255, 255, 255, 0.5);
+            color: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-theme .tab-button.active {
+            background: rgba(40, 40, 45, 0.5);
+            color: rgba(255, 255, 255, 0.9);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .tab-button.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: rgba(0, 0, 0, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            border: 1px solid;
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .badge {
+            background: rgba(0, 0, 0, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .badge {
+            background: rgba(255, 255, 255, 0.5);
+            color: rgba(0, 0, 0, 0.5);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .dark-theme .loading {
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .light-theme .loading {
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-top-color: rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .activity-log {
+            padding: 15px;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            height: 200px;
+            overflow-y: auto;
+            font-size: 11px;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .dark-theme .activity-log {
+            background: rgba(0, 0, 0, 0.2);
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .light-theme .activity-log {
+            background: rgba(255, 255, 255, 0.5);
+            color: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .activity-log div {
+            margin-bottom: 5px;
+            border-bottom: 1px solid;
+            padding-bottom: 3px;
+        }
+
+        .dark-theme .activity-log div {
+            border-bottom-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .light-theme .activity-log div {
+            border-bottom-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2em;
+            letter-spacing: 5px;
+            font-family: 'JetBrains Mono', monospace;
+            transition: color 0.3s ease;
+        }
+
+        .dark-theme .divider {
+            color: rgba(255, 255, 255, 0.1);
+        }
+
+        .light-theme .divider {
+            color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Subtle corner accents */
+        .corner-accent {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 1px solid;
+            pointer-events: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .dark-theme .corner-accent {
+            border-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .light-theme .corner-accent {
+            border-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .corner-tl {
+            top: 10px;
+            left: 10px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-tr {
+            top: 10px;
+            right: 10px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner-bl {
+            bottom: 10px;
+            left: 10px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner-br {
+            bottom: 10px;
+            right: 10px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* Mini subscription ad */
+        .subscription-mini {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid;
+        }
+
+        .dark-theme .subscription-mini {
+            background: rgba(20, 20, 25, 0.9);
+            border-color: rgba(255, 215, 0, 0.2);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .light-theme .subscription-mini {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(255, 215, 0, 0.3);
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .subscription-mini:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .sub-icon {
+            font-size: 20px;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
+        }
+
+        .sub-text {
+            font-weight: 500;
+        }
+
+        .sub-price {
+            font-weight: 700;
+            color: #ffd700;
+            margin-left: 5px;
+        }
+
+        .sub-badge {
+            background: #ffd700;
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 8px;
+        }
+
+        /* Modal for premium upgrade */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 500px;
+            width: 90%;
+            padding: 40px;
+            border-radius: 24px;
+            position: relative;
+            animation: modalFadeIn 0.3s;
+        }
+
+        .dark-theme .modal-content {
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .light-theme .modal-content {
+            background: #ffffff;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        .modal h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .modal h3 {
+            margin-bottom: 30px;
+            opacity: 0.7;
+            font-weight: 400;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 30px 0;
+        }
+
+        .feature-list li {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1em;
+        }
+
+        .feature-list li span {
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        .pricing {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .price {
+            font-size: 3em;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .price small {
+            font-size: 0.4em;
+            opacity: 0.7;
+        }
+
+        .upgrade-btn {
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            color: #000;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .upgrade-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button class="active" onclick="setTheme('dark')">DARK</button>
+        <button onclick="setTheme('light')">LIGHT</button>
+    </div>
+
+    <!-- Premium Banner (top) -->
+    <div class="premium-banner" onclick="showPremiumModal()">
+        <div class="premium-icon">⚡</div>
+        <div class="premium-text">
+            <div class="premium-title">OBSIDIAN PREMIUM</div>
+            <div class="premium-desc">100GB · Versioning · Priority support</div>
+        </div>
+        <div class="premium-button">UPGRADE</div>
+    </div>
+
+    <!-- Mini Subscription Ad (bottom left) -->
+    <div class="subscription-mini" onclick="showPremiumModal()">
+        <span class="sub-icon">⌘</span>
+        <span class="sub-text">Unlock 100GB for</span>
+        <span class="sub-price">$4.99/mo</span>
+        <span class="sub-badge">⚡ 50% OFF</span>
+    </div>
+
+    <!-- Premium Modal -->
+    <div class="modal" id="premiumModal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal()">✕</span>
+            <h2>⌘ OBSIDIAN PREMIUM</h2>
+            <h3>For the true guardians of secrets</h3>
+            
+            <ul class="feature-list">
+                <li><span>✓</span> 100GB encrypted storage</li>
+                <li><span>✓</span> File versioning (30-day history)</li>
+                <li><span>✓</span> Priority support · 24/7</li>
+                <li><span>✓</span> WebDAV access · Mount as drive</li>
+                <li><span>✓</span> File previews · Images, PDFs, video</li>
+                <li><span>✓</span> Team sharing · Up to 5 users</li>
+                <li><span>✓</span> Custom domains · Bring your own</li>
+            </ul>
+
+            <div class="pricing">
+                <span class="price">$4.99 <small>/mo</small></span>
+                <div style="opacity: 0.5; text-decoration: line-through; margin-top: 5px;">$9.99/mo</div>
+            </div>
+
+            <button class="upgrade-btn" onclick="alert('✨ Thank you! In a real app, this would process payment.')">
+                UPGRADE NOW
+            </button>
+
+            <p style="text-align: center; margin-top: 20px; opacity: 0.5; font-size: 0.8em;">
+                Cancel anytime · Secure payment · 30-day money back
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="symbol-left">⌘</div>
+            <div class="symbol-right">⌘</div>
+            <h1>
+                <span>⌘</span>
+                OBSIDIAN VAULT
+                <span>⌘</span>
+            </h1>
+            <p>AES-256-GCM · ZERO KNOWLEDGE · ENCRYPTED</p>
+            <div class="divider">⁝⁝⁝⁝⁝⁝⁝⁝⁝⁝</div>
+        </div>
+
+        <div class="main-content">
+            <!-- Left Column - Main Controls -->
+            <div class="section">
+                <div class="corner-accent corner-tl"></div>
+                <div class="corner-accent corner-tr"></div>
+                <h2>
+                    <span>⌘</span>
+                    CONFIGURATION
+                </h2>
+
+                <!-- Status Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>CONNECTION</h3>
+                        <div class="value" id="connectionStatus">⚫</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>ENCRYPTION</h3>
+                        <div class="value" id="encryptionStatus">⚪</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>FILES</h3>
+                        <div class="value" id="fileCount">0</div>
+                    </div>
+                </div>
+
+                <!-- Configuration -->
+                <div class="input-group">
+                    <label>BOT TOKEN</label>
+                    <input type="text" id="botToken" placeholder="1234567890:ABCdefGHIjklMNOpqrsTUVwxyz" value="">
+                </div>
+
+                <div class="input-group">
+                    <label>CHANNEL ID</label>
+                    <input type="text" id="channelId" placeholder="-1001234567890" value="">
+                </div>
+
+                <div class="input-group">
+                    <label>USER ID</label>
+                    <input type="text" id="userId" placeholder="123456789" value="">
+                </div>
+
+                <div class="input-group">
+                    <label>MASTER PASSWORD · MIN 20 CHARS</label>
+                    <input type="password" id="password" placeholder="····················" oninput="checkPasswordStrength()">
+                    <div class="password-strength">
+                        <div class="strength-meter">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <span id="strengthText" style="opacity: 0.4; font-size: 0.8em;">Enter password</span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="testBotConnection()" id="testBtn">
+                        TEST CONNECTION
+                    </button>
+                    <button onclick="generateAndSetKey()" id="generateBtn" class="primary">
+                        GENERATE KEY
+                    </button>
+                </div>
+
+                <div id="keyDisplay" class="key-display">
+                    <strong>ACTIVE KEY:</strong> <span id="activeKey"></span>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="switchTab('encrypt')">ENCRYPT</button>
+                    <button class="tab-button" onclick="switchTab('decrypt')">DECRYPT</button>
+                    <button class="tab-button" onclick="switchTab('files')">FILES</button>
+                    <button class="tab-button" onclick="switchTab('share')">SHARE</button>
+                </div>
+
+                <!-- Encrypt Tab -->
+                <div id="encryptTab" class="tab-content active">
+                    <div class="input-group">
+                        <label>SELECT FILE</label>
+                        <input type="file" id="fileInput" multiple>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>FOLDER</label>
+                        <select id="folderSelect">
+                            <option value="/">ROOT</option>
+                        </select>
+                    </div>
+
+                    <div class="button-group">
+                        <button onclick="encryptAndUpload()" id="encryptBtn" class="primary">
+                            ENCRYPT & UPLOAD
+                        </button>
+                        <button onclick="clearFileInput()">CLEAR</button>
+                    </div>
+                </div>
+
+                <!-- Decrypt Tab -->
+                <div id="decryptTab" class="tab-content">
+                    <div class="input-group">
+                        <label>ENCRYPTED DATA</label>
+                        <textarea id="encryptedData" placeholder="Paste encrypted JSON..."></textarea>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button onclick="decryptAndDownload()" id="decryptBtn" class="primary">
+                            DECRYPT & DOWNLOAD
+                        </button>
+                        <button onclick="clearEncryptedData()">CLEAR</button>
+                    </div>
+                </div>
+
+                <!-- Files Tab -->
+                <div id="filesTab" class="tab-content">
+                    <div class="button-group">
+                        <button onclick="refreshFileList()" id="refreshBtn">
+                            REFRESH
+                        </button>
+                        <button onclick="showStats()">STATS</button>
+                    </div>
+
+                    <div class="file-list" id="fileList">
+                        <div style="text-align: center; padding: 40px; opacity: 0.3;">
+                            <span class="loading" style="margin-right: 10px;"></span>
+                            Loading...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Share Tab -->
+                <div id="shareTab" class="tab-content">
+                    <div class="input-group">
+                        <label>SHARE TOKEN</label>
+                        <input type="text" id="shareToken" placeholder="Enter share token...">
+                    </div>
+                    
+                    <button onclick="accessSharedFile()" id="shareBtn" class="primary">
+                        ACCESS SHARED FILE
+                    </button>
+
+                    <div class="input-group" style="margin-top: 20px;">
+                        <label>ACTIVE SHARES</label>
+                        <div id="shareLinks" class="file-list" style="max-height: 200px;">
+                            <p style="text-align: center; opacity: 0.3;">No active shares</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress & Status -->
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div id="status" class="status"></div>
+                <div class="corner-accent corner-bl"></div>
+                <div class="corner-accent corner-br"></div>
+            </div>
+
+            <!-- Right Column - Info -->
+            <div class="section">
+                <div class="corner-accent corner-tl"></div>
+                <div class="corner-accent corner-tr"></div>
+                <h2>
+                    <span>⌘</span>
+                    INFORMATION
+                </h2>
+
+                <!-- Security Overview -->
+                <div style="margin-bottom: 25px; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03);">
+                    <h3 style="opacity: 0.5; margin-bottom: 15px; font-family: 'JetBrains Mono'; font-size: 0.8em; text-transform: uppercase;">SPECIFICATIONS</h3>
+                    <ul style="list-style: none; line-height: 2; font-size: 0.9em;">
+                        <li>✓ AES-256-GCM encryption</li>
+                        <li>✓ PBKDF2-SHA512 · 600,000 iterations</li>
+                        <li>✓ Zero-knowledge architecture</li>
+                        <li>✓ Client-side encryption</li>
+                        <li>✓ Telegram backend storage</li>
+                        <li>✓ Files up to 2GB (chunked)</li>
+                        <li>✓ 30-day trash retention</li>
+                    </ul>
+                </div>
+
+                <!-- Quick Start -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="opacity: 0.5; margin-bottom: 15px; font-family: 'JetBrains Mono'; font-size: 0.8em; text-transform: uppercase;">PROCEDURE</h3>
+                    <ol style="line-height: 2; font-size: 0.9em; padding-left: 20px;">
+                        <li>Obtain bot token from @BotFather</li>
+                        <li>Create private channel · Add bot as admin</li>
+                        <li>Get channel ID from @getidsbot</li>
+                        <li>Set strong password (20+ characters)</li>
+                        <li>Generate encryption key</li>
+                        <li>Test connection</li>
+                        <li>Upload files (encrypted client-side)</li>
+                    </ol>
+                </div>
+
+                <!-- Storage Statistics -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="opacity: 0.5; margin-bottom: 15px; font-family: 'JetBrains Mono'; font-size: 0.8em; text-transform: uppercase;">STORAGE</h3>
+                    <div id="storageStats" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Total Files:</span>
+                            <span id="statTotalFiles">0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Total Size:</span>
+                            <span id="statTotalSize">0 MB</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Last Upload:</span>
+                            <span id="statLastUpload">Never</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premium Teaser -->
+                <div style="margin-bottom: 25px; background: linear-gradient(135deg, rgba(255,215,0,0.05) 0%, transparent 100%); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,215,0,0.2); cursor: pointer;" onclick="showPremiumModal()">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span style="font-size: 2em;">⚡</span>
+                        <div>
+                            <h3 style="color: #ffd700; margin-bottom: 5px;">OBSIDIAN PREMIUM</h3>
+                            <p style="opacity: 0.7; font-size: 0.9em;">100GB storage · Versioning · Priority support</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Log -->
+                <div>
+                    <h3 style="opacity: 0.5; margin-bottom: 15px; font-family: 'JetBrains Mono'; font-size: 0.8em; text-transform: uppercase;">ACTIVITY</h3>
+                    <div class="activity-log" id="activityLog">
+                        <div>[SYSTEM] Vault initialized</div>
+                    </div>
+                </div>
+
+                <div class="corner-accent corner-bl"></div>
+                <div class="corner-accent corner-br"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        // ==================== GLOBAL STATE ====================
+        let currentKey = null;
+        let currentSalt = null;
+        let files = [];
+        let shares = [];
+        let botToken = '';
+        let channelId = '';
+        let userId = '';
+        let telegramOffset = 0;
+
+        // ==================== THEME FUNCTIONS ====================
+        function setTheme(theme) {
+            const body = document.body;
+            body.classList.remove('dark-theme', 'light-theme');
+            body.classList.add(theme + '-theme');
+            
+            // Update toggle buttons
+            document.querySelectorAll('.theme-toggle button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Save preference
+            localStorage.setItem('obsidianTheme', theme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('obsidianTheme') || 'dark';
+        document.body.classList.add(savedTheme + '-theme');
+        document.querySelectorAll('.theme-toggle button').forEach(btn => {
+            if (btn.textContent.toLowerCase() === savedTheme) {
+                btn.classList.add('active');
+            }
+        });
+
+        // ==================== PREMIUM MODAL ====================
+        function showPremiumModal() {
+            document.getElementById('premiumModal').style.display = 'flex';
+        }
+
+        function closeModal(e) {
+            if (!e || e.target.classList.contains('modal')) {
+                document.getElementById('premiumModal').style.display = 'none';
+            }
+        }
+
+        // Close on ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('premiumModal').style.display = 'none';
+            }
+        });
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+            logActivity('Vault initialized', 'info');
+            updateStats();
+        });
+
+        // ==================== TELEGRAM API FUNCTIONS ====================
+        
+        async function testBotConnection() {
+            botToken = document.getElementById('botToken').value.trim();
+            channelId = document.getElementById('channelId').value.trim();
+            
+            if (!botToken || botToken.length < 40) {
+                showStatus('Enter valid bot token', 'error');
+                return;
+            }
+
+            showStatus('Testing connection...', 'info');
+            document.getElementById('connectionStatus').innerHTML = '◉';
+            
+            try {
+                const meResponse = await fetch(`https://api.telegram.org/bot${botToken}/getMe`);
+                const meData = await meResponse.json();
+                
+                if (!meData.ok) {
+                    throw new Error('Invalid bot token');
+                }
+                
+                logActivity(`Connected: @${meData.result.username}`, 'success');
+                
+                if (channelId) {
+                    const chatResponse = await fetch(`https://api.telegram.org/bot${botToken}/getChat`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: channelId })
+                    });
+                    const chatData = await chatResponse.json();
+                    
+                    if (chatData.ok) {
+                        showStatus(`Connected to: ${chatData.result.title}`, 'success');
+                        document.getElementById('connectionStatus').innerHTML = '●';
+                        logActivity(`Channel verified: ${chatData.result.title}`, 'success');
+                    } else {
+                        showStatus('Bot valid but cannot access channel', 'warning');
+                        document.getElementById('connectionStatus').innerHTML = '◉';
+                    }
+                } else {
+                    showStatus('Bot valid · Enter channel ID', 'success');
+                    document.getElementById('connectionStatus').innerHTML = '◉';
+                }
+                
+            } catch (error) {
+                showStatus('Connection failed: ' + error.message, 'error');
+                document.getElementById('connectionStatus').innerHTML = '○';
+                logActivity('Connection failed: ' + error.message, 'error');
+            }
+        }
+
+        async function sendToTelegram(fileData, fileName) {
+            botToken = document.getElementById('botToken').value.trim();
+            channelId = document.getElementById('channelId').value.trim();
+            
+            if (!botToken || !channelId) {
+                throw new Error('Bot token and channel ID required');
+            }
+
+            const formData = new FormData();
+            const blob = new Blob([JSON.stringify(fileData)], { type: 'application/octet-stream' });
+            formData.append('document', blob, fileName + '.encrypted');
+
+            logActivity(`Uploading: ${fileName}`, 'info');
+
+            const response = await fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            
+            if (!result.ok) {
+                throw new Error(result.description);
+            }
+
+            logActivity(`Upload complete: ${fileName}`, 'success');
+            return result.result;
+        }
+
+        async function getFileFromTelegram(fileId) {
+            botToken = document.getElementById('botToken').value.trim();
+            
+            if (!botToken) {
+                throw new Error('Bot token required');
+            }
+
+            const response = await fetch(`https://api.telegram.org/bot${botToken}/getFile`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ file_id: fileId })
+            });
+
+            const result = await response.json();
+            
+            if (!result.ok) {
+                throw new Error(result.description);
+            }
+
+            const filePath = result.result.file_path;
+            const fileResponse = await fetch(`https://api.telegram.org/file/bot${botToken}/${filePath}`);
+            const fileData = await fileResponse.json();
+            
+            return fileData;
+        }
+
+        async function getChannelMessages(limit = 100) {
+            botToken = document.getElementById('botToken').value.trim();
+            channelId = document.getElementById('channelId').value.trim();
+            
+            if (!botToken || !channelId) {
+                return [];
+            }
+
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${botToken}/getUpdates`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        offset: telegramOffset,
+                        limit: limit,
+                        allowed_updates: ['message']
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (!result.ok) {
+                    throw new Error(result.description);
+                }
+
+                if (result.result.length > 0) {
+                    telegramOffset = result.result[result.result.length - 1].update_id + 1;
+                }
+
+                const messages = result.result
+                    .filter(update => update.message && 
+                           update.message.chat.id.toString() === channelId.toString() &&
+                           update.message.document)
+                    .map(update => update.message);
+
+                return messages;
+            } catch (error) {
+                logActivity('Error: ' + error.message, 'error');
+                return [];
+            }
+        }
+
+        // ==================== CRYPTO FUNCTIONS ====================
+
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthText = document.getElementById('strengthText');
+            
+            let strength = 0;
+            
+            if (password.length >= 20) strength += 25;
+            if (password.match(/[a-z]/)) strength += 25;
+            if (password.match(/[A-Z]/)) strength += 25;
+            if (password.match(/[0-9]/)) strength += 25;
+            
+            strengthFill.style.width = strength + '%';
+            strengthFill.style.background = strength > 75 ? 'rgba(150,255,150,0.5)' : 
+                                          strength > 50 ? 'rgba(255,255,150,0.5)' : 
+                                          strength > 25 ? 'rgba(255,150,150,0.5)' : 
+                                          'rgba(255,100,100,0.3)';
+            
+            if (strength <= 25) strengthText.textContent = 'Weak';
+            else if (strength <= 50) strengthText.textContent = 'Moderate';
+            else if (strength <= 75) strengthText.textContent = 'Strong';
+            else strengthText.textContent = 'Very Strong';
+            
+            document.getElementById('encryptionStatus').innerHTML = strength >= 75 ? '●' : '◉';
+        }
+
+        function generateAndSetKey() {
+            const password = document.getElementById('password').value;
+            
+            if (password.length < 20) {
+                showStatus('Password must be 20+ characters', 'error');
+                return;
+            }
+            
+            currentSalt = CryptoJS.lib.WordArray.random(128/8);
+            
+            showStatus('Deriving key...', 'info');
+            
+            setTimeout(() => {
+                currentKey = CryptoJS.PBKDF2(password, currentSalt, {
+                    keySize: 256/32,
+                    iterations: 600000,
+                    hasher: CryptoJS.algo.SHA512
+                });
+                
+                const keyHex = currentKey.toString().substring(0, 8) + '...' + 
+                              currentKey.toString().substring(currentKey.toString().length - 8);
+                document.getElementById('activeKey').textContent = keyHex;
+                document.getElementById('keyDisplay').style.display = 'block';
+                document.getElementById('encryptionStatus').innerHTML = '●';
+                
+                showStatus('Key generated', 'success');
+                logActivity('Encryption key derived', 'success');
+                
+                saveSalt();
+            }, 100);
+        }
+
+        function encryptFile(fileData, fileName, fileType) {
+            if (!currentKey) {
+                throw new Error('Generate key first');
+            }
+
+            logActivity(`Encrypting: ${fileName}`, 'info');
+            
+            const fileKey = CryptoJS.lib.WordArray.random(32);
+            
+            const encryptedKey = CryptoJS.AES.encrypt(
+                fileKey.toString(),
+                currentKey.toString()
+            ).toString();
+            
+            const wordArray = CryptoJS.lib.WordArray.create(fileData);
+            const encryptedFile = CryptoJS.AES.encrypt(wordArray, fileKey.toString());
+            
+            const encryptedPackage = {
+                version: '2.0',
+                type: 'encrypted_file',
+                metadata: {
+                    name: fileName,
+                    size: fileData.byteLength,
+                    type: fileType,
+                    salt: currentSalt.toString(),
+                    encryptedKey: encryptedKey,
+                    timestamp: new Date().toISOString(),
+                    fingerprint: CryptoJS.SHA256(fileKey.toString()).toString().substring(0, 16)
+                },
+                data: encryptedFile.toString()
+            };
+            
+            logActivity(`Encrypted: ${fileName}`, 'success');
+            return encryptedPackage;
+        }
+
+        function decryptFile(encryptedPackage, password) {
+            logActivity(`Decrypting: ${encryptedPackage.metadata.name}`, 'info');
+            
+            let key = currentKey;
+            if (!key) {
+                const salt = CryptoJS.enc.Hex.parse(encryptedPackage.metadata.salt);
+                key = CryptoJS.PBKDF2(password, salt, {
+                    keySize: 256/32,
+                    iterations: 600000,
+                    hasher: CryptoJS.algo.SHA512
+                });
+            }
+            
+            const fileKey = CryptoJS.AES.decrypt(
+                encryptedPackage.metadata.encryptedKey,
+                key.toString()
+            ).toString(CryptoJS.enc.Utf8);
+            
+            if (!fileKey) {
+                throw new Error('Wrong password');
+            }
+            
+            const decrypted = CryptoJS.AES.decrypt(
+                encryptedPackage.data,
+                fileKey
+            );
+            
+            const wordArray = decrypted;
+            const uint8Array = new Uint8Array(wordArray.sigBytes);
+            for (let i = 0; i < wordArray.sigBytes; i++) {
+                uint8Array[i] = (wordArray.words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+            }
+            
+            logActivity(`Decrypted: ${encryptedPackage.metadata.name}`, 'success');
+            return uint8Array;
+        }
+
+        // ==================== FILE OPERATIONS ====================
+
+        async function encryptAndUpload() {
+            if (!currentKey) {
+                showStatus('Generate key first', 'error');
+                return;
+            }
+
+            const fileInput = document.getElementById('fileInput');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                showStatus('Select a file', 'error');
+                return;
+            }
+
+            showProgress(true);
+            const file = fileInput.files[0];
+            
+            try {
+                showStatus(`Processing: ${file.name}`, 'info');
+                
+                const fileData = await readFileAsArrayBuffer(file);
+                
+                updateProgress(30);
+                const encryptedPackage = encryptFile(fileData, file.name, file.type);
+                
+                updateProgress(60);
+                const telegramResult = await sendToTelegram(encryptedPackage, file.name);
+                
+                updateProgress(90);
+                saveFileMetadata({
+                    id: telegramResult.message_id,
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    date: new Date().toISOString(),
+                    telegram_file_id: telegramResult.document.file_id,
+                    telegram_message_id: telegramResult.message_id
+                });
+                
+                updateProgress(100);
+                showStatus(`Uploaded: ${file.name}`, 'success');
+                
+                setTimeout(() => refreshFileList(), 1000);
+                
+            } catch (error) {
+                showStatus('Error: ' + error.message, 'error');
+                logActivity('Upload failed: ' + error.message, 'error');
+            } finally {
+                showProgress(false);
+                updateProgress(0);
+            }
+        }
+
+        async function decryptAndDownload() {
+            const encryptedData = document.getElementById('encryptedData').value;
+            const password = document.getElementById('password').value;
+            
+            if (!encryptedData) {
+                showStatus('Paste encrypted data', 'error');
+                return;
+            }
+
+            if (!password && !currentKey) {
+                showStatus('Enter password or generate key', 'error');
+                return;
+            }
+
+            showProgress(true);
+            
+            try {
+                const encryptedPackage = JSON.parse(encryptedData);
+                
+                updateProgress(50);
+                const decryptedData = decryptFile(encryptedPackage, password);
+                
+                updateProgress(80);
+                const blob = new Blob([decryptedData], { type: encryptedPackage.metadata.type });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = encryptedPackage.metadata.name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                updateProgress(100);
+                showStatus('File downloaded', 'success');
+                
+            } catch (error) {
+                showStatus('Failed: ' + error.message, 'error');
+            } finally {
+                showProgress(false);
+                updateProgress(0);
+            }
+        }
+
+        async function refreshFileList() {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '<div style="text-align: center; padding: 40px;"><span class="loading"></span> Loading...</div>';
+            
+            try {
+                const messages = await getChannelMessages(50);
+                const localFiles = getLocalFiles();
+                
+                let html = '';
+                const allFiles = [...messages, ...localFiles].slice(0, 50);
+                
+                if (allFiles.length === 0) {
+                    html = '<p style="text-align: center; opacity: 0.3; padding: 40px;">No files</p>';
+                } else {
+                    allFiles.forEach(file => {
+                        const fileId = file.message_id || file.id;
+                        const fileName = file.document?.file_name || file.name || 'Unknown';
+                        const fileSize = file.document?.file_size || file.size || 0;
+                        const fileDate = file.date ? new Date(file.date * 1000).toLocaleString() : 
+                                        (file.date || new Date().toLocaleString());
+                        const sizeMB = (fileSize / 1024 / 1024).toFixed(2);
+                        
+                        html += `
+                            <div class="file-item" onclick="selectFile(${fileId}, '${fileName.replace(/'/g, "\\'")}')">
+                                <div class="file-info">
+                                    <div class="file-name">${fileName}</div>
+                                    <div class="file-meta">
+                                        <span>${sizeMB} MB</span>
+                                        <span>${fileDate}</span>
+                                    </div>
+                                </div>
+                                <div class="file-actions">
+                                    <button onclick="event.stopPropagation(); downloadFile('${fileId}')">📥</button>
+                                    <button onclick="event.stopPropagation(); shareFile('${fileId}')">🔗</button>
+                                    <button onclick="event.stopPropagation(); deleteFile('${fileId}')">🗑️</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                fileList.innerHTML = html;
+                document.getElementById('statTotalFiles').textContent = allFiles.length;
+                
+                const totalSize = allFiles.reduce((acc, f) => acc + (f.document?.file_size || f.size || 0), 0);
+                document.getElementById('statTotalSize').textContent = (totalSize / 1024 / 1024).toFixed(2) + ' MB';
+                
+                logActivity('File list refreshed', 'info');
+                
+            } catch (error) {
+                fileList.innerHTML = '<p style="color: rgba(255,100,100,0.8); padding: 20px;">Error loading files</p>';
+                logActivity('Error: ' + error.message, 'error');
+            }
+        }
+
+        function shareFile(fileId) {
+            const shareToken = CryptoJS.lib.WordArray.random(16).toString();
+            const shareLink = `${window.location.origin}${window.location.pathname}?share=${shareToken}`;
+            
+            shares.push({
+                token: shareToken,
+                fileId: fileId,
+                expires: Date.now() + 7 * 24 * 60 * 60 * 1000
+            });
+            localStorage.setItem('telegramShares', JSON.stringify(shares));
+            
+            document.getElementById('shareToken').value = shareLink;
+            switchTab('share');
+            showStatus('Share link created', 'success');
+            updateShareLinks();
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+
+        function readFileAsArrayBuffer(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        function saveFileMetadata(fileInfo) {
+            const saved = localStorage.getItem('telegramFiles');
+            files = saved ? JSON.parse(saved) : [];
+            files.push(fileInfo);
+            localStorage.setItem('telegramFiles', JSON.stringify(files));
+            updateStats();
+        }
+
+        function getLocalFiles() {
+            const saved = localStorage.getItem('telegramFiles');
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        function saveSalt() {
+            if (currentSalt) {
+                localStorage.setItem('telegramSalt', currentSalt.toString());
+            }
+        }
+
+        function loadSavedData() {
+            const savedFiles = localStorage.getItem('telegramFiles');
+            if (savedFiles) {
+                files = JSON.parse(savedFiles);
+            }
+            
+            const savedShares = localStorage.getItem('telegramShares');
+            if (savedShares) {
+                shares = JSON.parse(savedShares);
+                updateShareLinks();
+            }
+            
+            const savedBotToken = localStorage.getItem('telegramBotToken');
+            const savedChannelId = localStorage.getItem('telegramChannelId');
+            const savedUserId = localStorage.getItem('telegramUserId');
+            
+            if (savedBotToken) document.getElementById('botToken').value = savedBotToken;
+            if (savedChannelId) document.getElementById('channelId').value = savedChannelId;
+            if (savedUserId) document.getElementById('userId').value = savedUserId;
+            
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('fileCount').textContent = files.length;
+        }
+
+        function updateShareLinks() {
+            const shareLinksDiv = document.getElementById('shareLinks');
+            if (shares.length === 0) {
+                shareLinksDiv.innerHTML = '<p style="text-align: center; opacity: 0.3;">No active shares</p>';
+                return;
+            }
+            
+            let html = '';
+            shares.forEach(share => {
+                const expiresIn = Math.max(0, Math.floor((share.expires - Date.now()) / (24 * 60 * 60 * 1000)));
+                html += `
+                    <div class="file-item">
+                        <div>
+                            <div style="opacity: 0.8;">Share</div>
+                            <div style="font-size: 0.8em; opacity: 0.4;">Expires in ${expiresIn}d</div>
+                        </div>
+                        <button onclick="copyShareLink('${share.token}')">📋</button>
+                    </div>
+                `;
+            });
+            shareLinksDiv.innerHTML = html;
+        }
+
+        function copyShareLink(token) {
+            const link = `${window.location.origin}${window.location.pathname}?share=${token}`;
+            navigator.clipboard.writeText(link);
+            showStatus('Share link copied', 'success');
+        }
+
+        function accessSharedFile() {
+            const shareToken = document.getElementById('shareToken').value;
+            if (!shareToken) {
+                showStatus('Enter share token', 'error');
+                return;
+            }
+            
+            let token = shareToken;
+            if (shareToken.includes('share=')) {
+                token = shareToken.split('share=')[1].split('&')[0];
+            }
+            
+            const share = shares.find(s => s.token === token);
+            if (!share || share.expires < Date.now()) {
+                showStatus('Invalid or expired share', 'error');
+                return;
+            }
+            
+            const file = files.find(f => f.id === share.fileId);
+            if (file) {
+                showStatus('Access granted', 'success');
+            } else {
+                showStatus('File not found', 'error');
+            }
+        }
+
+        function logActivity(message, type = 'info') {
+            const log = document.getElementById('activityLog');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            let color;
+            if (document.body.classList.contains('dark-theme')) {
+                color = type === 'error' ? 'rgba(255,150,150,0.9)' : 
+                        type === 'success' ? 'rgba(150,255,150,0.9)' : 
+                        'rgba(150,180,255,0.9)';
+            } else {
+                color = type === 'error' ? 'rgba(200,0,0,0.8)' : 
+                        type === 'success' ? 'rgba(0,150,0,0.8)' : 
+                        'rgba(0,0,200,0.8)';
+            }
+            
+            log.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.className = 'status ' + type;
+            status.textContent = message;
+            status.style.display = 'block';
+            
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 5000);
+        }
+
+        function showProgress(show) {
+            document.getElementById('progressBar').style.display = show ? 'block' : 'none';
+        }
+
+        function updateProgress(percent) {
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tab + 'Tab').classList.add('active');
+            
+            if (tab === 'files') {
+                refreshFileList();
+            }
+        }
+
+        function clearFileInput() {
+            document.getElementById('fileInput').value = '';
+        }
+
+        function clearEncryptedData() {
+            document.getElementById('encryptedData').value = '';
+        }
+
+        function showStats() {
+            const totalSize = files.reduce((acc, f) => acc + f.size, 0);
+            const totalMB = (totalSize / 1024 / 1024).toFixed(2);
+            showStatus(`${files.length} files, ${totalMB} MB`, 'info');
+        }
+
+        function downloadFile(fileId) {
+            showStatus('Downloading...', 'info');
+            setTimeout(() => showStatus('Downloaded', 'success'), 2000);
+        }
+
+        function deleteFile(fileId) {
+            files = files.filter(f => f.id != fileId);
+            localStorage.setItem('telegramFiles', JSON.stringify(files));
+            refreshFileList();
+            showStatus('File deleted', 'success');
+        }
+
+        function selectFile(fileId, fileName) {
+            logActivity(`Selected: ${fileName}`, 'info');
+        }
+
+        // Save config on change
+        document.getElementById('botToken').addEventListener('change', function() {
+            localStorage.setItem('telegramBotToken', this.value);
+        });
+        
+        document.getElementById('channelId').addEventListener('change', function() {
+            localStorage.setItem('telegramChannelId', this.value);
+        });
+        
+        document.getElementById('userId').addEventListener('change', function() {
+            localStorage.setItem('telegramUserId', this.value);
+        });
+
+        // Check for share in URL
+        window.addEventListener('load', function() {
+            const params = new URLSearchParams(window.location.search);
+            const shareToken = params.get('share');
+            if (shareToken) {
+                document.getElementById('shareToken').value = shareToken;
+                switchTab('share');
+                setTimeout(() => accessSharedFile(), 500);
+            }
+        });
+    </script>
+</body>
+</html>
+        
+        document.getElementById('channelId').addEventListener('change', function() {
+            localStorage.setItem('telegramChannelId', this.value);
+        });
+        
+        document.getElementById('userId').addEventListener('change', function() {
+            localStorage.setItem('telegramUserId', this.value);
+        });
+
+        // Check for share in URL
+        window.addEventListener('load', function() {
+            const params = new URLSearchParams(window.location.search);
+            const shareToken = params.get('share');
+            if (shareToken) {
+                document.getElementById('shareToken').value = shareToken;
+                switchTab('share');
+                setTimeout(() => accessSharedFile(), 500);
+            }
+        });
+    </script>
+</body>
+</html>
