@@ -374,6 +374,37 @@
             font-family: monospace;
         }
 
+        /* Error Message */
+        .error-box {
+            background: #3a1e1e;
+            border: 1px solid #ff4444;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #ff8888;
+            font-size: 14px;
+        }
+
+        .success-box {
+            background: #1e3a1e;
+            border: 1px solid #4caf50;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #4caf50;
+            font-size: 14px;
+        }
+
+        .warning-box {
+            background: #3a3a1e;
+            border: 1px solid #ffd700;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #ffd700;
+            font-size: 14px;
+        }
+
         /* Buttons */
         .button-group {
             display: grid;
@@ -552,13 +583,13 @@
             border-color: #c62828;
         }
 
-        .status.info {
-            background: #1e3a5f;
+        .status.warning {
+            background: #3a3a1e;
             border: 1px solid #ffd700;
             color: #ffd700;
         }
 
-        body.light .status.info {
+        body.light .status.warning {
             background: #fff3e0;
             color: #b8860b;
             border-color: #b8860b;
@@ -766,6 +797,38 @@
         body.light .info-box code {
             background: #fff;
             border: 1px solid #ddd;
+        }
+
+        /* Troubleshooting Box */
+        .troubleshoot-box {
+            background: #2a2a2a;
+            border: 1px solid #ffd700;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        body.light .troubleshoot-box {
+            background: #fff3e0;
+        }
+
+        .troubleshoot-box h4 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .troubleshoot-box ol {
+            color: #ddd;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        body.light .troubleshoot-box ol {
+            color: #333;
+        }
+
+        .troubleshoot-box li {
+            margin: 8px 0;
         }
 
         /* Storage Stats Box */
@@ -1184,11 +1247,12 @@
 
                 <div class="input-group">
                     <label>CHANNEL ID</label>
-                    <input type="text" id="channelId" placeholder="-1001234567890" value="">
+                    <input type="text" id="channelId" placeholder="-1001234567890 (starts with -100)" value="">
+                    <small style="color: #aaa;">Forward a message to @getidsbot to get the exact ID</small>
                 </div>
 
                 <div class="input-group">
-                    <label>USER ID</label>
+                    <label>USER ID (optional)</label>
                     <input type="text" id="userId" placeholder="123456789" value="">
                 </div>
 
@@ -1205,6 +1269,9 @@
                     <button onclick="testBotConnection()">TEST CONNECTION</button>
                     <button class="primary" onclick="generateAndSetKey()">GENERATE KEY</button>
                 </div>
+
+                <!-- Connection Status Message -->
+                <div id="connectionMessage" style="display: none;"></div>
 
                 <div id="keyDisplay" class="key-display">
                     <strong>ACTIVE KEY:</strong> <span id="activeKey"></span>
@@ -1316,6 +1383,28 @@
                         <li>Generate encryption key</li>
                         <li>Test connection</li>
                         <li>Upload files (encrypted client-side)</li>
+                    </ol>
+                </div>
+
+                <!-- Troubleshooting Guide -->
+                <div class="troubleshoot-box">
+                    <h4>🔧 CHANNEL ACCESS FIX</h4>
+                    <ol>
+                        <li><strong>Step 1:</strong> Go to your channel → Info → Administrators</li>
+                        <li><strong>Step 2:</strong> Click "Add Admin" and select your bot</li>
+                        <li><strong>Step 3:</strong> Enable ALL permissions:
+                            <ul style="margin-top: 5px; margin-left: 20px;">
+                                <li>✓ Post messages</li>
+                                <li>✓ Edit messages</li>
+                                <li>✓ Delete messages</li>
+                                <li>✓ Invite users</li>
+                                <li>✓ Pin messages</li>
+                                <li>✓ Manage video chats</li>
+                            </ul>
+                        </li>
+                        <li><strong>Step 4:</strong> Forward a message to @getidsbot</li>
+                        <li><strong>Step 5:</strong> Copy the ID (starts with -100)</li>
+                        <li><strong>Step 6:</strong> Test connection again</li>
                     </ol>
                 </div>
 
@@ -1472,14 +1561,15 @@
             channelId = document.getElementById('channelId').value.trim();
             
             if (!botToken || botToken.length < 40) {
-                showStatus('Enter valid bot token', 'error');
+                showStatus('❌ Enter valid bot token', 'error');
                 return;
             }
 
-            showStatus('Testing connection...', 'info');
+            showStatus('🔄 Testing connection...', 'info');
             document.getElementById('connectionStatus').innerHTML = '◉';
             
             try {
+                // Test bot token
                 const meResponse = await fetch(`https://api.telegram.org/bot${botToken}/getMe`);
                 const meData = await meResponse.json();
                 
@@ -1487,8 +1577,9 @@
                     throw new Error('Invalid bot token');
                 }
                 
-                logActivity(`Connected: @${meData.result.username}`, 'success');
+                logActivity(`✅ Bot connected: @${meData.result.username}`, 'success');
                 
+                // Test channel access if provided
                 if (channelId) {
                     const chatResponse = await fetch(`https://api.telegram.org/bot${botToken}/getChat`, {
                         method: 'POST',
@@ -1498,23 +1589,67 @@
                     const chatData = await chatResponse.json();
                     
                     if (chatData.ok) {
-                        showStatus(`Connected to: ${chatData.result.title}`, 'success');
-                        document.getElementById('connectionStatus').innerHTML = '●';
-                        logActivity(`Channel verified: ${chatData.result.title}`, 'success');
+                        // Check if bot is admin
+                        const botMemberResponse = await fetch(`https://api.telegram.org/bot${botToken}/getChatMember`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ 
+                                chat_id: channelId,
+                                user_id: meData.result.id
+                            })
+                        });
+                        const botMemberData = await botMemberResponse.json();
+                        
+                        const isAdmin = botMemberData.ok && 
+                                       (botMemberData.result.status === 'administrator' || 
+                                        botMemberData.result.status === 'creator');
+                        
+                        if (isAdmin) {
+                            showStatus(`✅ Connected to: ${chatData.result.title} (Bot is admin)`, 'success');
+                            document.getElementById('connectionStatus').innerHTML = '●';
+                            logActivity(`Channel verified: ${chatData.result.title} (admin)`, 'success');
+                        } else {
+                            showStatus('⚠️ Bot is in channel but NOT an admin. Add as admin with full permissions.', 'warning');
+                            document.getElementById('connectionStatus').innerHTML = '◉';
+                            logActivity('Channel found but bot is not admin', 'warning');
+                            
+                            // Show troubleshooting box
+                            showTroubleshooting();
+                        }
                     } else {
-                        showStatus('Bot valid but cannot access channel', 'warning');
-                        document.getElementById('connectionStatus').innerHTML = '◉';
+                        // Check if channel exists but bot isn't added
+                        if (chatData.description && chatData.description.includes('bot was not found')) {
+                            showStatus('❌ Bot not found in channel. Add bot to channel first.', 'error');
+                        } else {
+                            showStatus('❌ Invalid channel ID. Use format: -1001234567890', 'error');
+                        }
+                        document.getElementById('connectionStatus').innerHTML = '○';
+                        logActivity('Channel access failed: ' + (chatData.description || 'Unknown error'), 'error');
                     }
                 } else {
-                    showStatus('Bot valid · Enter channel ID', 'success');
+                    showStatus('✅ Bot valid · Enter channel ID to continue', 'success');
                     document.getElementById('connectionStatus').innerHTML = '◉';
                 }
                 
             } catch (error) {
-                showStatus('Connection failed: ' + error.message, 'error');
+                showStatus('❌ Connection failed: ' + error.message, 'error');
                 document.getElementById('connectionStatus').innerHTML = '○';
                 logActivity('Connection failed: ' + error.message, 'error');
             }
+        }
+
+        function showTroubleshooting() {
+            const messageDiv = document.getElementById('connectionMessage');
+            messageDiv.style.display = 'block';
+            messageDiv.className = 'warning-box';
+            messageDiv.innerHTML = `
+                <strong>🔧 Quick Fix:</strong><br>
+                1. Go to your channel → Info → Administrators<br>
+                2. Click "Add Admin" and select your bot<br>
+                3. Enable ALL permissions<br>
+                4. Click "Save"<br>
+                5. Test connection again
+            `;
         }
 
         async function sendToTelegram(fileData, fileName) {
@@ -2013,6 +2148,7 @@
             const timestamp = new Date().toLocaleTimeString();
             const color = type === 'error' ? '#ff4444' : 
                          type === 'success' ? '#4caf50' : 
+                         type === 'warning' ? '#ffd700' :
                          '#ffd700';
             
             log.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
