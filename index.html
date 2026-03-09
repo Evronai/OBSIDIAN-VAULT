@@ -14,7 +14,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: #0a0a0a;
-            color: #e0e0e0;
+            color: #ffffff;
             min-height: 100vh;
             padding: 20px;
             transition: background-color 0.3s, color 0.3s;
@@ -22,7 +22,7 @@
 
         body.light {
             background: #f5f5f5;
-            color: #1a1a1a;
+            color: #000000;
         }
 
         /* Theme Toggle */
@@ -31,16 +31,17 @@
             top: 20px;
             right: 20px;
             z-index: 1000;
-            background: #1e1e1e;
-            border: 1px solid #333;
+            background: #2a2a2a;
+            border: 1px solid #444;
             border-radius: 30px;
             padding: 4px;
             display: flex;
         }
 
         body.light .theme-toggle {
-            background: #e0e0e0;
-            border-color: #ccc;
+            background: #ffffff;
+            border-color: #ddd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .theme-toggle button {
@@ -64,14 +65,14 @@
         }
 
         .theme-toggle button.active {
-            background: #333;
-            color: #ffd700;
+            background: #ffd700;
+            color: #000;
         }
 
         body.light .theme-toggle button.active {
-            background: #fff;
+            background: #ffd700;
             color: #000;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(255,215,0,0.3);
         }
 
         /* Addon Banner */
@@ -80,7 +81,7 @@
             top: 20px;
             left: 20px;
             z-index: 1000;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            background: #1e3a1e;
             border: 1px solid #4caf50;
             border-radius: 12px;
             padding: 12px 20px;
@@ -93,18 +94,19 @@
         }
 
         body.light .addon-banner {
-            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            background: #e8f5e9;
             border-color: #4caf50;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .addon-banner:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.2);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
         }
 
         .addon-icon {
             font-size: 24px;
+            color: #4caf50;
         }
 
         .addon-title {
@@ -115,7 +117,7 @@
 
         .addon-desc {
             font-size: 12px;
-            color: #888;
+            color: #ccc;
         }
 
         body.light .addon-desc {
@@ -139,7 +141,7 @@
             bottom: 20px;
             left: 20px;
             z-index: 1000;
-            background: #1e1e1e;
+            background: #1e3a1e;
             border: 1px solid #4caf50;
             border-radius: 50px;
             padding: 10px 20px;
@@ -152,7 +154,7 @@
         }
 
         body.light .addon-mini {
-            background: #fff;
+            background: #e8f5e9;
             border-color: #4caf50;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
@@ -163,10 +165,16 @@
 
         .mini-icon {
             font-size: 18px;
+            color: #4caf50;
         }
 
         .mini-text {
             font-size: 13px;
+            color: #fff;
+        }
+
+        body.light .mini-text {
+            color: #000;
         }
 
         .mini-price {
@@ -187,27 +195,27 @@
         .container {
             max-width: 1400px;
             margin: 80px auto 0;
-            background: #121212;
+            background: #1a1a1a;
             border-radius: 24px;
             overflow: hidden;
             box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
 
         body.light .container {
-            background: #fff;
+            background: #ffffff;
             box-shadow: 0 30px 60px rgba(0,0,0,0.1);
         }
 
         /* Header */
         .header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+            background: #2a2a2a;
             padding: 40px;
             text-align: center;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #444;
         }
 
         body.light .header {
-            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            background: #f8f9fa;
             border-bottom: 1px solid #e0e0e0;
         }
 
@@ -218,14 +226,15 @@
             align-items: center;
             justify-content: center;
             gap: 15px;
+            color: #ffd700;
         }
 
         body.light .header h1 {
-            color: #000;
+            color: #b8860b;
         }
 
         .header p {
-            color: #888;
+            color: #aaa;
             letter-spacing: 2px;
             font-size: 0.9em;
         }
@@ -250,14 +259,14 @@
 
         /* Sections */
         .section {
-            background: #1e1e1e;
-            border: 1px solid #333;
+            background: #2a2a2a;
+            border: 1px solid #444;
             border-radius: 16px;
             padding: 25px;
         }
 
         body.light .section {
-            background: #fff;
+            background: #ffffff;
             border: 1px solid #e0e0e0;
         }
 
@@ -267,11 +276,12 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #444;
             padding-bottom: 15px;
         }
 
         body.light .section h2 {
+            color: #b8860b;
             border-bottom: 1px solid #e0e0e0;
         }
 
@@ -284,8 +294,8 @@
         }
 
         .stat-card {
-            background: #2a2a2a;
-            border: 1px solid #333;
+            background: #3a3a3a;
+            border: 1px solid #555;
             border-radius: 12px;
             padding: 20px;
             text-align: center;
@@ -293,14 +303,18 @@
 
         body.light .stat-card {
             background: #f5f5f5;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #ddd;
         }
 
         .stat-card h3 {
             font-size: 0.8em;
-            color: #888;
+            color: #aaa;
             margin-bottom: 8px;
             text-transform: uppercase;
+        }
+
+        body.light .stat-card h3 {
+            color: #666;
         }
 
         .stat-card .value {
@@ -317,10 +331,14 @@
         .input-group label {
             display: block;
             margin-bottom: 8px;
-            color: #888;
+            color: #aaa;
             font-size: 0.8em;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+
+        body.light .input-group label {
+            color: #666;
         }
 
         .input-group input,
@@ -328,8 +346,8 @@
         .input-group select {
             width: 100%;
             padding: 12px;
-            background: #2a2a2a;
-            border: 1px solid #333;
+            background: #3a3a3a;
+            border: 1px solid #555;
             border-radius: 8px;
             color: #fff;
             font-size: 14px;
@@ -339,7 +357,7 @@
         body.light .input-group input,
         body.light .input-group textarea,
         body.light .input-group select {
-            background: #fff;
+            background: #ffffff;
             border: 1px solid #ccc;
             color: #000;
         }
@@ -366,8 +384,8 @@
 
         button {
             padding: 12px 24px;
-            background: #333;
-            border: 1px solid #444;
+            background: #3a3a3a;
+            border: 1px solid #555;
             border-radius: 8px;
             color: #fff;
             font-size: 14px;
@@ -383,7 +401,7 @@
         }
 
         button:hover {
-            background: #444;
+            background: #4a4a4a;
             border-color: #ffd700;
         }
 
@@ -393,7 +411,7 @@
 
         button.primary {
             background: #ffd700;
-            border-color: #ffd700;
+            border-color: #b8860b;
             color: #000;
             font-weight: 600;
         }
@@ -405,8 +423,8 @@
 
         button.addon {
             background: #4caf50;
-            border-color: #4caf50;
-            color: #000;
+            border-color: #2e7d32;
+            color: #fff;
             font-weight: 600;
         }
 
@@ -419,7 +437,7 @@
         .file-list {
             max-height: 400px;
             overflow-y: auto;
-            background: #2a2a2a;
+            background: #3a3a3a;
             border-radius: 8px;
             padding: 10px;
             margin-top: 15px;
@@ -430,8 +448,8 @@
         }
 
         .file-item {
-            background: #1e1e1e;
-            border: 1px solid #333;
+            background: #2a2a2a;
+            border: 1px solid #555;
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 10px;
@@ -443,7 +461,7 @@
         }
 
         body.light .file-item {
-            background: #fff;
+            background: #ffffff;
             border: 1px solid #e0e0e0;
         }
 
@@ -455,13 +473,22 @@
         .file-name {
             font-weight: 500;
             margin-bottom: 5px;
+            color: #fff;
+        }
+
+        body.light .file-name {
+            color: #000;
         }
 
         .file-meta {
             font-size: 12px;
-            color: #888;
+            color: #aaa;
             display: flex;
             gap: 15px;
+        }
+
+        body.light .file-meta {
+            color: #666;
         }
 
         .file-actions {
@@ -478,7 +505,7 @@
         /* Progress Bar */
         .progress-bar {
             height: 4px;
-            background: #333;
+            background: #3a3a3a;
             border-radius: 2px;
             margin: 15px 0;
             overflow: hidden;
@@ -494,41 +521,45 @@
 
         /* Status Messages */
         .status {
-            padding: 12px;
+            padding: 15px;
             border-radius: 8px;
             margin-top: 15px;
             display: none;
+            font-weight: 500;
         }
 
         .status.success {
-            background: rgba(0,255,0,0.1);
-            border: 1px solid #00ff00;
-            color: #00ff00;
+            background: #1e3a1e;
+            border: 1px solid #4caf50;
+            color: #4caf50;
+        }
+
+        body.light .status.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-color: #2e7d32;
         }
 
         .status.error {
-            background: rgba(255,0,0,0.1);
-            border: 1px solid #ff0000;
-            color: #ff0000;
+            background: #3a1e1e;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+        }
+
+        body.light .status.error {
+            background: #ffebee;
+            color: #c62828;
+            border-color: #c62828;
         }
 
         .status.info {
-            background: rgba(255,255,0,0.1);
+            background: #1e3a5f;
             border: 1px solid #ffd700;
             color: #ffd700;
         }
 
-        body.light .status.success {
-            color: #008000;
-            border-color: #008000;
-        }
-
-        body.light .status.error {
-            color: #ff0000;
-            border-color: #ff0000;
-        }
-
         body.light .status.info {
+            background: #fff3e0;
             color: #b8860b;
             border-color: #b8860b;
         }
@@ -536,7 +567,7 @@
         /* Password Strength */
         .strength-meter {
             height: 4px;
-            background: #333;
+            background: #3a3a3a;
             border-radius: 2px;
             margin: 8px 0;
         }
@@ -548,9 +579,18 @@
             transition: all 0.3s;
         }
 
+        #strengthText {
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        body.light #strengthText {
+            color: #666;
+        }
+
         /* Key Display */
         .key-display {
-            background: #2a2a2a;
+            background: #3a3a3a;
             border: 1px solid #ffd700;
             border-radius: 8px;
             padding: 15px;
@@ -559,6 +599,7 @@
             font-size: 12px;
             word-break: break-all;
             display: none;
+            color: #ffd700;
         }
 
         /* Tabs */
@@ -572,8 +613,9 @@
             flex: 1;
             padding: 10px;
             background: transparent;
-            border: 1px solid #333;
-            color: #888;
+            border: 1px solid #555;
+            color: #aaa;
+            cursor: pointer;
         }
 
         body.light .tab-button {
@@ -583,7 +625,7 @@
 
         .tab-button.active {
             background: #ffd700;
-            border-color: #ffd700;
+            border-color: #b8860b;
             color: #000;
         }
 
@@ -597,25 +639,27 @@
 
         /* Activity Log */
         .activity-log {
-            background: #2a2a2a;
-            border: 1px solid #333;
+            background: #3a3a3a;
+            border: 1px solid #555;
             border-radius: 8px;
             padding: 15px;
             height: 200px;
             overflow-y: auto;
             font-family: monospace;
             font-size: 11px;
+            color: #ddd;
         }
 
         body.light .activity-log {
             background: #f5f5f5;
             border: 1px solid #ccc;
+            color: #333;
         }
 
         .activity-log div {
             margin-bottom: 5px;
             padding-bottom: 3px;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #555;
         }
 
         body.light .activity-log div {
@@ -624,7 +668,7 @@
 
         /* Addon Teaser */
         .addon-teaser {
-            background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+            background: #1e3a1e;
             border: 1px solid #4caf50;
             border-radius: 12px;
             padding: 20px;
@@ -634,12 +678,12 @@
         }
 
         body.light .addon-teaser {
-            background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+            background: #e8f5e9;
         }
 
         .addon-teaser:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.2);
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.3);
         }
 
         .teaser-content {
@@ -650,6 +694,7 @@
 
         .teaser-icon {
             font-size: 2.5em;
+            color: #4caf50;
         }
 
         .teaser-text h3 {
@@ -658,8 +703,97 @@
         }
 
         .teaser-text p {
-            color: #888;
+            color: #ccc;
             font-size: 0.9em;
+        }
+
+        body.light .teaser-text p {
+            color: #666;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            background: #3a3a3a;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 3px solid #ffd700;
+        }
+
+        body.light .info-box {
+            background: #f5f5f5;
+        }
+
+        .info-box h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .info-box p {
+            color: #ddd;
+            line-height: 1.6;
+        }
+
+        body.light .info-box p {
+            color: #333;
+        }
+
+        .info-box ul {
+            list-style: none;
+        }
+
+        .info-box ul li {
+            color: #ddd;
+            margin: 10px 0;
+        }
+
+        body.light .info-box ul li {
+            color: #333;
+        }
+
+        .info-box code {
+            display: block;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            color: #4caf50;
+            font-family: monospace;
+        }
+
+        body.light .info-box code {
+            background: #fff;
+            border: 1px solid #ddd;
+        }
+
+        /* Storage Stats Box */
+        .stats-box {
+            background: #3a3a3a;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        body.light .stats-box {
+            background: #f5f5f5;
+        }
+
+        .stats-box div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #ddd;
+        }
+
+        body.light .stats-box div {
+            color: #333;
+        }
+
+        .stats-box span:last-child {
+            color: #ffd700;
+            font-weight: 600;
         }
 
         /* USDT Payment Modal */
@@ -670,14 +804,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             z-index: 2000;
             justify-content: center;
             align-items: center;
         }
 
         .modal-content {
-            background: #1e1e1e;
+            background: #2a2a2a;
             border: 2px solid #4caf50;
             border-radius: 24px;
             padding: 40px;
@@ -689,7 +823,7 @@
         }
 
         body.light .modal-content {
-            background: #fff;
+            background: #ffffff;
         }
 
         .modal-close {
@@ -712,9 +846,13 @@
         }
 
         .modal h3 {
-            color: #888;
+            color: #aaa;
             margin-bottom: 30px;
             font-weight: 400;
+        }
+
+        body.light .modal h3 {
+            color: #666;
         }
 
         .feature-list {
@@ -739,10 +877,35 @@
             font-weight: 700;
         }
 
+        .explanation-box {
+            background: #3a3a3a;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        body.light .explanation-box {
+            background: #f5f5f5;
+        }
+
+        .explanation-box p {
+            color: #ddd;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        body.light .explanation-box p {
+            color: #333;
+        }
+
+        .explanation-box strong {
+            color: #4caf50;
+        }
+
         /* USDT Payment Section */
         .payment-section {
-            background: #2a2a2a;
-            border: 1px solid #333;
+            background: #3a3a3a;
+            border: 1px solid #555;
             border-radius: 16px;
             padding: 25px;
             margin: 20px 0;
@@ -753,8 +916,20 @@
             background: #f5f5f5;
         }
 
+        .price-tag {
+            font-size: 2em;
+            color: #4caf50;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .network-info {
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+
         .usdt-address {
-            background: #1a1a1a;
+            background: #2a2a2a;
             border: 1px solid #4caf50;
             border-radius: 12px;
             padding: 20px;
@@ -768,7 +943,7 @@
         }
 
         .usdt-address:hover {
-            background: #2a2a2a;
+            background: #3a3a3a;
             border-color: #ffd700;
         }
 
@@ -776,8 +951,7 @@
             width: 200px;
             height: 200px;
             margin: 20px auto;
-            background: linear-gradient(45deg, #1a1a1a 25%, #2a2a2a 25%, #2a2a2a 50%, #1a1a1a 50%, #1a1a1a 75%, #2a2a2a 75%);
-            background-size: 20px 20px;
+            background: #2a2a2a;
             border: 2px solid #4caf50;
             border-radius: 20px;
             display: flex;
@@ -802,12 +976,13 @@
             margin-top: 20px;
             padding: 15px;
             border-radius: 8px;
-            background: #1a1a1a;
-            border: 1px solid #333;
+            background: #2a2a2a;
+            border: 1px solid #555;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            color: #ffd700;
         }
 
         .status-indicator {
@@ -849,7 +1024,7 @@
             display: inline-block;
             width: 16px;
             height: 16px;
-            border: 2px solid #333;
+            border: 2px solid #555;
             border-top-color: #ffd700;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
@@ -863,7 +1038,7 @@
         .divider {
             text-align: center;
             margin: 20px 0;
-            color: #333;
+            color: #555;
             letter-spacing: 5px;
         }
 
@@ -884,7 +1059,7 @@
         <span class="addon-icon">₿</span>
         <div>
             <div class="addon-title">OBSIDIAN ADDON</div>
-            <div class="addon-desc">100GB · Versioning · Priority · USDT</div>
+            <div class="addon-desc">100GB tools · Versioning · Priority</div>
         </div>
         <span class="addon-button">UNLOCK</span>
     </div>
@@ -892,7 +1067,7 @@
     <!-- Mini Addon Ad (USDT) -->
     <div class="addon-mini" onclick="showAddonModal()">
         <span class="mini-icon">₿</span>
-        <span class="mini-text">Unlock 100GB for</span>
+        <span class="mini-text">Unlock 100GB tools for</span>
         <span class="mini-price">50 USDT</span>
         <span class="mini-badge">LIFETIME</span>
     </div>
@@ -905,29 +1080,23 @@
             <h3>One-time payment · Lifetime access</h3>
             
             <ul class="feature-list">
-                <li><span>✓</span> 100GB encrypted storage capacity</li>
+                <li><span>✓</span> 100GB storage management tools</li>
                 <li><span>✓</span> File versioning (30-day history)</li>
                 <li><span>✓</span> Priority support · 24/7</li>
                 <li><span>✓</span> WebDAV access · Mount as drive</li>
                 <li><span>✓</span> File previews · Images, PDFs, video</li>
                 <li><span>✓</span> Team sharing · Up to 5 users</li>
                 <li><span>✓</span> Custom domains · Bring your own</li>
-                <li><span>✓</span> Automatic file chunking for large files</li>
-                <li><span>✓</span> Full-text search across all files</li>
-                <li><span>✓</span> 30-day trash retention</li>
             </ul>
 
-            <div style="background: #2a2a2a; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                <p style="color: #4caf50; font-weight: 600; margin-bottom: 10px;">📦 What you're paying for:</p>
-                <p style="color: #888; font-size: 14px; line-height: 1.6;">
-                    <strong>50 USDT unlocks the software features</strong> that help you manage up to 100GB of files in your Telegram channel. The files themselves are stored for free on Telegram's servers.
-                </p>
+            <div class="explanation-box">
+                <p><strong>📦 Important:</strong> You're paying for the <strong>software tools</strong> to manage your files. The actual storage is your free Telegram channel. Files are encrypted before upload and stored on Telegram's servers at no cost.</p>
             </div>
 
             <!-- USDT Payment Section -->
             <div class="payment-section">
-                <div style="font-size: 2em; color: #4caf50; margin-bottom: 10px;">50 USDT</div>
-                <div style="color: #888; margin-bottom: 20px;">One-time payment · TRC-20 Network</div>
+                <div class="price-tag">50 USDT</div>
+                <div class="network-info">One-time payment · TRC-20 Network</div>
                 
                 <!-- USDT Address -->
                 <div class="usdt-address" id="usdtAddress" onclick="copyAddress()">
@@ -937,9 +1106,9 @@
                 <!-- QR Code Placeholder -->
                 <div class="qr-placeholder">
                     <div style="text-align: center;">
-                        <div style="font-size: 3em; margin-bottom: 5px;">⌘</div>
-                        <div>QR Code</div>
-                        <div style="font-size: 10px; margin-top: 5px;">(TRC-20)</div>
+                        <div style="font-size: 3em; margin-bottom: 5px; color: #4caf50;">⌘</div>
+                        <div style="color: #4caf50;">QR Code</div>
+                        <div style="font-size: 10px; margin-top: 5px; color: #888;">(TRC-20)</div>
                     </div>
                 </div>
                 
@@ -1029,7 +1198,7 @@
                     <div class="strength-meter">
                         <div class="strength-fill" id="strengthFill"></div>
                     </div>
-                    <span id="strengthText" style="color: #888; font-size: 12px;">Enter password</span>
+                    <span id="strengthText">Enter password</span>
                 </div>
 
                 <div class="button-group">
@@ -1083,7 +1252,7 @@
                     </div>
 
                     <div class="file-list" id="fileList">
-                        <div style="text-align: center; padding: 40px; color: #888;">
+                        <div style="text-align: center; padding: 40px; color: #aaa;">
                             <span class="loading"></span> Loading files...
                         </div>
                     </div>
@@ -1101,7 +1270,7 @@
                     <div class="input-group" style="margin-top: 20px;">
                         <label>ACTIVE SHARES</label>
                         <div id="shareLinks" class="file-list" style="max-height: 200px;">
-                            <p style="text-align: center; color: #888;">No active shares</p>
+                            <p style="text-align: center; color: #aaa;">No active shares</p>
                         </div>
                     </div>
                 </div>
@@ -1123,9 +1292,9 @@
                 </h2>
 
                 <!-- Security Overview -->
-                <div style="margin-bottom: 25px; background: #2a2a2a; padding: 20px; border-radius: 12px;">
-                    <h3 style="color: #888; margin-bottom: 15px; font-size: 0.8em; text-transform: uppercase;">SPECIFICATIONS</h3>
-                    <ul style="list-style: none; line-height: 2;">
+                <div class="info-box">
+                    <h3>SPECIFICATIONS</h3>
+                    <ul>
                         <li>✓ AES-256-GCM encryption</li>
                         <li>✓ PBKDF2-SHA512 · 600,000 iterations</li>
                         <li>✓ Zero-knowledge architecture</li>
@@ -1137,9 +1306,9 @@
                 </div>
 
                 <!-- Quick Start -->
-                <div style="margin-bottom: 25px;">
-                    <h3 style="color: #888; margin-bottom: 15px; font-size: 0.8em; text-transform: uppercase;">PROCEDURE</h3>
-                    <ol style="line-height: 2; padding-left: 20px;">
+                <div class="info-box">
+                    <h3>PROCEDURE</h3>
+                    <ol style="color: #ddd; padding-left: 20px;">
                         <li>Obtain bot token from @BotFather</li>
                         <li>Create private channel · Add bot as admin</li>
                         <li>Get channel ID from @getidsbot</li>
@@ -1151,34 +1320,28 @@
                 </div>
 
                 <!-- Storage Stats -->
-                <div style="margin-bottom: 25px;">
-                    <h3 style="color: #888; margin-bottom: 15px; font-size: 0.8em; text-transform: uppercase;">STORAGE</h3>
-                    <div style="background: #2a2a2a; padding: 15px; border-radius: 12px;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                            <span>Total Files:</span>
-                            <span id="statTotalFiles">0</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                            <span>Total Size:</span>
-                            <span id="statTotalSize">0 MB</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>Last Upload:</span>
-                            <span id="statLastUpload">Never</span>
-                        </div>
+                <div class="stats-box">
+                    <h3 style="color: #ffd700; margin-bottom: 15px;">STORAGE</h3>
+                    <div>
+                        <span>Total Files:</span>
+                        <span id="statTotalFiles">0</span>
+                    </div>
+                    <div>
+                        <span>Total Size:</span>
+                        <span id="statTotalSize">0 MB</span>
+                    </div>
+                    <div>
+                        <span>Last Upload:</span>
+                        <span id="statLastUpload">Never</span>
                     </div>
                 </div>
 
                 <!-- Storage Source Explanation -->
-                <div style="margin-bottom: 25px; background: #2a2a2a; padding: 20px; border-radius: 12px; border-left: 3px solid #4caf50;">
-                    <h3 style="color: #4caf50; margin-bottom: 10px;">📦 Where is the storage?</h3>
-                    <p style="color: #888; font-size: 14px; line-height: 1.6;">
-                        <strong>Your Telegram channel</strong> provides the storage for free. The 100GB addon unlocks software features to manage that space efficiently. You're paying for the tools, not the disks.
-                    </p>
-                    <div style="margin-top: 10px; padding: 10px; background: #1a1a1a; border-radius: 6px;">
-                        <code style="color: #4caf50;">Telegram servers → Free storage</code><br>
-                        <code style="color: #ffd700;">Addon → Organization tools</code>
-                    </div>
+                <div class="info-box" style="border-left-color: #4caf50;">
+                    <h3 style="color: #4caf50;">📦 WHERE IS THE STORAGE?</h3>
+                    <p><strong>Your Telegram channel</strong> provides the storage for free. The 100GB addon unlocks software features to manage that space efficiently. You're paying for the tools, not the disks.</p>
+                    <code>Telegram servers → Free storage</code>
+                    <code style="color: #ffd700;">Addon → Organization tools</code>
                 </div>
 
                 <!-- Addon Teaser (USDT) -->
@@ -1194,7 +1357,7 @@
 
                 <!-- Activity Log -->
                 <div>
-                    <h3 style="color: #888; margin-bottom: 15px; font-size: 0.8em; text-transform: uppercase;">ACTIVITY</h3>
+                    <h3 style="color: #aaa; margin-bottom: 15px; font-size: 0.8em; text-transform: uppercase;">ACTIVITY</h3>
                     <div class="activity-log" id="activityLog">
                         <div>[SYSTEM] Vault initialized</div>
                     </div>
@@ -1443,15 +1606,19 @@
             if (strength <= 25) {
                 strengthFill.style.background = '#ff4444';
                 strengthText.textContent = 'Weak';
+                strengthText.style.color = '#ff4444';
             } else if (strength <= 50) {
                 strengthFill.style.background = '#ffaa00';
                 strengthText.textContent = 'Moderate';
+                strengthText.style.color = '#ffaa00';
             } else if (strength <= 75) {
                 strengthFill.style.background = '#00aaff';
                 strengthText.textContent = 'Strong';
+                strengthText.style.color = '#00aaff';
             } else {
-                strengthFill.style.background = '#00ff00';
+                strengthFill.style.background = '#4caf50';
                 strengthText.textContent = 'Very Strong';
+                strengthText.style.color = '#4caf50';
             }
             
             document.getElementById('encryptionStatus').innerHTML = strength >= 75 ? '●' : '◉';
@@ -1670,7 +1837,7 @@
                 const allFiles = [...messages, ...localFiles].slice(0, 50);
                 
                 if (allFiles.length === 0) {
-                    html = '<p style="text-align: center; color: #888; padding: 40px;">No files found</p>';
+                    html = '<p style="text-align: center; color: #aaa; padding: 40px;">No files found</p>';
                 } else {
                     allFiles.forEach(file => {
                         const fileId = file.message_id || file.id;
@@ -1789,7 +1956,7 @@
         function updateShareLinks() {
             const shareLinksDiv = document.getElementById('shareLinks');
             if (shares.length === 0) {
-                shareLinksDiv.innerHTML = '<p style="text-align: center; color: #888;">No active shares</p>';
+                shareLinksDiv.innerHTML = '<p style="text-align: center; color: #aaa;">No active shares</p>';
                 return;
             }
             
@@ -1799,8 +1966,8 @@
                 html += `
                     <div class="file-item">
                         <div>
-                            <div>Share</div>
-                            <div style="font-size: 12px; color: #888;">Expires in ${expiresIn}d</div>
+                            <div style="color: #fff;">Share</div>
+                            <div style="font-size: 12px; color: #aaa;">Expires in ${expiresIn}d</div>
                         </div>
                         <button onclick="copyShareLink('${share.token}')">📋</button>
                     </div>
@@ -1845,7 +2012,7 @@
             const log = document.getElementById('activityLog');
             const timestamp = new Date().toLocaleTimeString();
             const color = type === 'error' ? '#ff4444' : 
-                         type === 'success' ? '#00ff00' : 
+                         type === 'success' ? '#4caf50' : 
                          '#ffd700';
             
             log.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
